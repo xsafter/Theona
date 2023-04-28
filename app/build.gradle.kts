@@ -30,7 +30,20 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
+    buildFeatures { // Enables Jetpack Compose for this module
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.0"
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
+
 
 dependencies {
 
@@ -73,4 +86,8 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 
     implementation("org.xmtp:android:0.0.9")
+    implementation (libs.tink)
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
 }
