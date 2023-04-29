@@ -39,6 +39,9 @@ class MainActivity : AppCompatActivity() {
     // Create the client with a `SigningKey` from your app
     val options = ClientOptions(api = ClientOptions.Api(env = XMTPEnvironment.PRODUCTION, isSecure = true))
 
+
+    private val messagesString = mutableListOf<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -50,6 +53,16 @@ class MainActivity : AppCompatActivity() {
             val account = PrivateKeyBuilder()
 
             var client: Client
+
+            runBlocking {
+                val serializedKeys = readKeys()
+                if (serializedKeys != null) {
+                    keys = PrivateKeyBundleV1Builder.fromEncodedData(readKeys()!!)
+                }
+                //keys = PrivateKeyBundleV1Builder.fromEncodedData("CsABCIfB0Mf8MBIiCiAfuH7fgVT4t63nzqz58VGgPOYbVYlZRfPgbeJW3LewlRqSAQiJwdDH/DASRApCCkAJNk3AyJUk9qO+V4jeZHHom89rlu6kghpAeC789imKcyGbiimz0C3Ua35W2Mwctw9vYM/Kz3SQ8R6bZ7dQrTXVGkMKQQR2Fn2fZhAPNzHcE4uDxmwScCUFZAWpIKY0gBlRO9fTHQHRw93c9YBhXneNWOeoTOnOuHY4Jur7neBl92uj9K5wEsIBCJvB0Mf8MBIiCiACee4haaxOOWAtpp9vt/F7D8kbExUcwfh4nycGCp3oJhqUAQibwdDH/DASRgpECkCwxOi+YNX0eElKkhTrWfzLJqsdkFtbBYYs2ELC00V/9gus4X2ag9M4foEonVibF26uQykeliBpPhVJ0mWgfqCGEAEaQwpBBOmNzSuo3BPKF4BOkXNYstAvLpkJ4UlSpVTrbUW85SmXAZe4QS/cdwubwKb+0Z+PzAQT70u4GvYaWSbSzll+AOA=")
+            }
+
+            println(keys)
 
             try {
                 if (keys == null) {
@@ -74,13 +87,7 @@ class MainActivity : AppCompatActivity() {
                     storeKeys(serializedKeys)
                 }
 
-                return
-            }
-
-            runBlocking {
-                //keys = readKeys()?.let { PrivateKeyBundleV1Builder.fromEncodedData(it) }
-
-                keys = PrivateKeyBundleV1Builder.fromEncodedData("CsABCIfB0Mf8MBIiCiAfuH7fgVT4t63nzqz58VGgPOYbVYlZRfPgbeJW3LewlRqSAQiJwdDH/DASRApCCkAJNk3AyJUk9qO+V4jeZHHom89rlu6kghpAeC789imKcyGbiimz0C3Ua35W2Mwctw9vYM/Kz3SQ8R6bZ7dQrTXVGkMKQQR2Fn2fZhAPNzHcE4uDxmwScCUFZAWpIKY0gBlRO9fTHQHRw93c9YBhXneNWOeoTOnOuHY4Jur7neBl92uj9K5wEsIBCJvB0Mf8MBIiCiACee4haaxOOWAtpp9vt/F7D8kbExUcwfh4nycGCp3oJhqUAQibwdDH/DASRgpECkCwxOi+YNX0eElKkhTrWfzLJqsdkFtbBYYs2ELC00V/9gus4X2ag9M4foEonVibF26uQykeliBpPhVJ0mWgfqCGEAEaQwpBBOmNzSuo3BPKF4BOkXNYstAvLpkJ4UlSpVTrbUW85SmXAZe4QS/cdwubwKb+0Z+PzAQT70u4GvYaWSbSzll+AOA=")
+                //return
             }
 
             client = Client().buildFrom(bundle = keys!!, options = options)
@@ -104,25 +111,25 @@ class MainActivity : AppCompatActivity() {
             // Load all messages in the conversation
             val messages = conversation.messages()
 
+        runBlocking {
+            getMessages(conversation)
+        }
+
             Log.d("xmtp", "messages: ${messages.size}")
 
             // Send a message
-            conversation.send(text = "yoba")
+            //conversation.send(text = "yoba")
 
             Log.d("xmtp", "message sent")
 
             Log.d("xmtp", "messages: ${conversation.messages().size}")
 
-            var messagesString: String
-
-            runBlocking {
-                messagesString = getMessages(conversation)
-            }
-
             setContent {
-                SimpleTextField()
-                textLogger(messagesString)
+                MessengerUI(messagesString) { message ->
+                    conversation.send(text = message)
+                }
             }
+
 //        }
     }
 
@@ -131,6 +138,7 @@ class MainActivity : AppCompatActivity() {
         conversation.streamMessages().collect {
             Log.e("xmtp", "${it.senderAddress}: ${it.body}")
              messages += "${it.senderAddress}: ${it.body}\n"
+            messagesString.add("${it.senderAddress}: ${it.body}")
         }
 
         return messages
@@ -169,7 +177,13 @@ class MainActivity : AppCompatActivity() {
             preferences[USER_KEY]
         }.first()
 
+        println(keys)
+
         return keys
+    }
+
+    fun updateMessages(newMessage: String) {
+        messagesString.add(newMessage)
     }
 
 }
