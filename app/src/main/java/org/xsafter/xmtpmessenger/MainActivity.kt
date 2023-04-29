@@ -19,8 +19,10 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.xmtp.android.library.Client
 import org.xmtp.android.library.ClientOptions
@@ -111,14 +113,11 @@ class MainActivity : AppCompatActivity() {
             // Load all messages in the conversation
             val messages = conversation.messages()
 
-        runBlocking {
+        GlobalScope.launch {
             getMessages(conversation)
         }
 
             Log.d("xmtp", "messages: ${messages.size}")
-
-            // Send a message
-            //conversation.send(text = "yoba")
 
             Log.d("xmtp", "message sent")
 
