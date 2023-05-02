@@ -31,7 +31,9 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun MessengerUI(messages: MutableList<String>, onSend: (String) -> Unit) {
     MaterialTheme {
-        //val messages = remember { mutableListOf<String>() }
+
+        //var messages by remember { mutableStateOf(messagesList) }
+
         var newMessageText by remember { mutableStateOf("") }
 
         Column(
@@ -50,7 +52,7 @@ fun MessengerUI(messages: MutableList<String>, onSend: (String) -> Unit) {
                         Text(
                             text = message,
                             style = TextStyle(fontSize = 16.sp),
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                     }
@@ -75,8 +77,8 @@ fun MessengerUI(messages: MutableList<String>, onSend: (String) -> Unit) {
                     onClick = {
                         if (newMessageText.isNotBlank()) {
                             messages.add(newMessageText)
-                            //newMessageText = ""
                             onSend(newMessageText)
+                            newMessageText = ""
                         }
                     },
                     modifier = Modifier.align(Alignment.CenterVertically)
