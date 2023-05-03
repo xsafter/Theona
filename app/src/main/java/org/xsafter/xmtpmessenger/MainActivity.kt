@@ -19,7 +19,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -38,39 +38,35 @@ class MainActivity : AppCompatActivity() {
 
     private val USER_KEY = stringPreferencesKey("user_key")
 
+    lateinit var client: Client
+    val options = ClientOptions(api = ClientOptions.Api(env = XMTPEnvironment.PRODUCTION, isSecure = true))
+
 
     private val messagesString = mutableListOf<String>()
-
-    lateinit var client: Client
-    private val options = ClientOptions(api = ClientOptions.Api(env = XMTPEnvironment.PRODUCTION, isSecure = true))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //GlobalScope.launch {
 
-            var keys:  PrivateKeyBundleV1?  = null
-
-            setupClient()
-
-            PrivateKeyBundleV1Builder.encodeData(client!!.privateKeyBundleV1)
-
-            ClientManager.createClient(keys.toString())
-
-
+            initializeClient()
+            // Create the client with a `SigningKey` from your app
+             //client = ClientManager.client
             Log.d("xmtp", "account created")
 
+            // Start a conversation with XMTP
             val conversation =
                 client.conversations.newConversation("0xaE69785837cbc9fB2cf50e6E6419a7044D80eEF3")
 
             Log.d("xmtp", "conversation created")
 
+            // Load all messages in the conversation
             val messages = conversation.messages()
 
-        //runBlocking {
-            //getMessages(conversation)
-        //}
+        GlobalScope.launch {
+            getMessages(conversation)
+        }
+
             Log.d("xmtp", "messages: ${messages.size}")
 
             Log.d("xmtp", "message sent")
@@ -83,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-        //}
+//        }
     }
 
     suspend fun getMessages(conversation: Conversation): String {
@@ -139,35 +135,51 @@ class MainActivity : AppCompatActivity() {
         messagesString.add(newMessage)
     }
 
-    private fun setupClient(){
-        lifecycleScope.launch {
-            val keys = runBlocking {
-                if (readKeys() == null) {
-                    null
-                }
-                else {
-                    PrivateKeyBundleV1Builder.fromEncodedData(readKeys()!!)
+
+    fun initializeClient() {
+        runBlocking {
+            var keys: PrivateKeyBundleV1? = null
+
+            val account = PrivateKeyBuilder()
+
+            runBlocking {
+                val serializedKeys = readKeys()
+                if (serializedKeys != null) {
+                    keys = PrivateKeyBundleV1Builder.fromEncodedData(readKeys()!!)
                 }
             }
 
-            client = if (keys == null) {
-                createAndStoreNewClient()
-            } else {
-                Client().create(PrivateKeyBuilder(), ClientManager.CLIENT_OPTIONS)
+            println(keys)
+
+            try {
+                if (keys == null) {
+                    client = Client().create(account, ClientManager.CLIENT_OPTIONS)
+                    // Serialize the key bundle and store it somewhere safe
+                    val serializedKeys =
+                        PrivateKeyBundleV1Builder.encodeData(client.privateKeyBundleV1)
+
+                    println(serializedKeys)
+                    runBlocking {
+                        storeKeys(serializedKeys)
+                    }
+
+                }
+            } catch (e: NullPointerException) {
+                client = Client().create(account, ClientManager.CLIENT_OPTIONS)
+                // Serialize the key bundle and store it somewhere safe
+                val serializedKeys =
+                    PrivateKeyBundleV1Builder.encodeData(client.privateKeyBundleV1)
+                runBlocking {
+                    storeKeys(serializedKeys)
+                }
             }
 
+            client = Client().buildFrom(bundle = keys!!, options = options)
+            PrivateKeyBundleV1Builder.encodeData(client!!.privateKeyBundleV1)
+
+            ClientManager.createClient(keys.toString())
+
+            Log.d("xmtp", account.address)
         }
-
-    }
-
-    private suspend fun createAndStoreNewClient(): Client {
-        val account = PrivateKeyBuilder()
-        val client = Client().create(account, options)
-
-        val serializedKeys = PrivateKeyBundleV1Builder.encodeData(client.privateKeyBundleV1)
-        println(serializedKeys)
-        storeKeys(serializedKeys)
-
-        return client
     }
 }
