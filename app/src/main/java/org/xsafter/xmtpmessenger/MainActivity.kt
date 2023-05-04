@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,23 +43,25 @@ class MainActivity : AppCompatActivity() {
     val options = ClientOptions(api = ClientOptions.Api(env = XMTPEnvironment.PRODUCTION, isSecure = true))
 
 
-    private val messagesString = mutableListOf<String>()
+    private val messagesString = mutableStateListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
             initializeClient()
-            // Create the client with a `SigningKey` from your app
-             //client = ClientManager.client
+
             Log.d("xmtp", "account created")
 
-            // Start a conversation with XMTP
-            val conversation =
-                client.conversations.newConversation("0xaE69785837cbc9fB2cf50e6E6419a7044D80eEF3")
+            val convBuilder = ConversationHelper(client)
 
-            Log.d("xmtp", "conversation created")
+            val conversations =
+                convBuilder.createConversation("0xaE69785837cbc9fB2cf50e6E6419a7044D80eEF3")
+        val conversation = conversations[0]!!
+        val geoConversation = conversations[1]!!
+
+        geoConversation.send("0.0 0.0")
+        Log.d("xmtp", "conversation created")
 
             // Load all messages in the conversation
             val messages = conversation.messages()
@@ -85,9 +88,10 @@ class MainActivity : AppCompatActivity() {
     suspend fun getMessages(conversation: Conversation): String {
         var messages = ""
         conversation.streamMessages().collect {
-            Log.e("xmtp", "${it.senderAddress}: ${it.body}")
+            Log.e("msg", "${it.senderAddress}: ${it.body}")
              messages += "${it.senderAddress}: ${it.body}\n"
             messagesString.add("${it.senderAddress}: ${it.body}")
+
         }
 
         return messages

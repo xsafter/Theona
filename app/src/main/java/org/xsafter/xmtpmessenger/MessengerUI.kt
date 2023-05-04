@@ -29,10 +29,10 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MessengerUI(messages: MutableList<String>, onSend: (String) -> Unit) {
+fun MessengerUI(messagesList: MutableList<String>, onSend: (String) -> Unit) {
     MaterialTheme {
 
-        //var messages by remember { mutableStateOf(messagesList) }
+        var messages by remember { mutableStateOf(messagesList) }
 
         var newMessageText by remember { mutableStateOf("") }
 
