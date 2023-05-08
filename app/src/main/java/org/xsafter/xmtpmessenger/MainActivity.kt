@@ -1,26 +1,30 @@
 package org.xsafter.xmtpmessenger
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.core.app.ActivityCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -38,51 +42,58 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "ke
 class MainActivity : AppCompatActivity() {
 
     private val USER_KEY = stringPreferencesKey("user_key")
-
-    lateinit var client: Client
-    val options = ClientOptions(api = ClientOptions.Api(env = XMTPEnvironment.PRODUCTION, isSecure = true))
-
-
+    private val PERMISSION_ID = 143
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var client: Client
+    private val options = ClientOptions(api = ClientOptions.Api(env = XMTPEnvironment.PRODUCTION, isSecure = true))
     private val messagesString = mutableStateListOf<String>()
+    private lateinit var conversation: Conversation
+    private lateinit var geoConversation: Conversation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initializeClient()
+        setupLocationServices()
+        setupConversations()
+        loadMessages()
+        setupUI()
+    }
 
-            initializeClient()
+    private fun setupLocationServices() {
+        if (!checkPermissions()) {
+            requestPermissions()
+        }
 
-            Log.d("xmtp", "account created")
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager?
+        try {
+            locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
+        } catch (ex: SecurityException) {
+            Log.d("myTag", "Security Exception, no location available")
+        }
+    }
 
-            val convBuilder = ConversationHelper(client)
+    private fun setupConversations() {
+        val convBuilder = ConversationHelper(client)
+        val conversations = convBuilder.createConversation("0xaE69785837cbc9fB2cf50e6E6419a7044D80eEF3")
 
-            val conversations =
-                convBuilder.createConversation("0xaE69785837cbc9fB2cf50e6E6419a7044D80eEF3")
-        val conversation = conversations[0]!!
-        val geoConversation = conversations[1]!!
+        conversation = conversations[0]!!
+        geoConversation = conversations[1]!!
+    }
 
-        geoConversation.send("0.0 0.0")
-        Log.d("xmtp", "conversation created")
-
-            // Load all messages in the conversation
-            val messages = conversation.messages()
-
+    private fun loadMessages() {
         GlobalScope.launch {
             getMessages(conversation)
         }
+    }
 
-            Log.d("xmtp", "messages: ${messages.size}")
-
-            Log.d("xmtp", "message sent")
-
-            Log.d("xmtp", "messages: ${conversation.messages().size}")
-
-            setContent {
-                MessengerUI(messagesString) { message ->
-                    conversation.send(text = message)
-                }
+    private fun setupUI() {
+        setContent {
+            MessengerUI(messagesString) { message ->
+                conversation.send(text = message)
             }
-
-//        }
+        }
     }
 
     suspend fun getMessages(conversation: Conversation): String {
@@ -97,24 +108,59 @@ class MainActivity : AppCompatActivity() {
         return messages
     }
 
-    @Composable
-    fun textLogger(messagesList: String) {
-        Text(text = messagesList)
+    private val locationListener: LocationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            geoConversation.send(Gson().toJson(GeoMessage(location.latitude, location.longitude)))
+        }
+        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+        override fun onProviderEnabled(provider: String) {}
+        override fun onProviderDisabled(provider: String) {
+            WarningToast(message = "Location disabled")
+        }
     }
 
+    private fun checkPermissions(): Boolean {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            return true
+        }
+        return false
+    }
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun SimpleTextField(): String {
-        var text by remember { mutableStateOf(TextFieldValue("")) }
-        TextField(
-            value = text,
-            onValueChange = { newText ->
-                text = newText
-            }
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION),
+            PERMISSION_ID
         )
+    }
 
-        return text.text
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_ID) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+
+            }
+        }
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        var locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
+    }
+
+    private fun startGeoGetterJob(timeInterval: Long): Job {
+        return CoroutineScope(Dispatchers.Default).launch {
+            while (NonCancellable.isActive) {
+                //val location = getLastLocation()
+                //val jsonGeoMessage = Gson().toJson(GeoMessage(location[0], location[1]))
+                //geoConversation.send(jsonGeoMessage)
+
+                delay(timeInterval)
+            }
+        }
     }
 
     suspend fun storeKeys(serializedKeys: String) {
@@ -133,10 +179,6 @@ class MainActivity : AppCompatActivity() {
         println(keys)
 
         return keys
-    }
-
-    fun updateMessages(newMessage: String) {
-        messagesString.add(newMessage)
     }
 
 

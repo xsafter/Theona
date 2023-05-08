@@ -25,16 +25,16 @@ class ConversationHelper(val client: Client) {
     }
 
     fun getAllConversations(contact: String): Array<List<Conversation>> {
-        // Get all the conversations
+        // Get all the conversations with all users
         val conversations = client.conversations.list()
 
-        // Filter for the ones from your app
+        // Filter for the regular conversation
         val textConversations = conversations.filter {
             val conversationId = it.conversationId ?: return@filter false
             conversationId.startsWith(TEXT_LABEL)
         }
 
-        // Filter for the ones from your app
+        // Filter for the conversation with geodata
         val geoConversations = conversations.filter {
             val conversationId = it.conversationId ?: return@filter false
             conversationId.startsWith(GEO_LABEL)

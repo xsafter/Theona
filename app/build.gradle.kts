@@ -88,6 +88,9 @@ dependencies {
     implementation("org.xmtp:android:0.0.9")
     implementation (libs.tink)
 
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(libs.androidx.datastore.preferences)
+    implementation (libs.play.services.location)
+
+    implementation (libs.toasty)
 
 }
