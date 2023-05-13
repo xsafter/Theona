@@ -6,8 +6,6 @@
 .gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
 >
 app/.gitignore,5/1/51e1c5d383dfaa35e0e7e5873a0a99355a86880f
-X
-(gradle/wrapper/gradle-wrapper.properties,f/b/fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
 f
 6app/src/main/java/org/xsafter/xmtpmessenger/KeyUtil.kt,4/d/4d288d35bf1256d77e594c602a874878217fe5d6
 
@@ -16,3 +14,13 @@ p
 @app/src/test/java/org/xsafter/xmtpmessenger/ExampleUnitTest.java,2/f/2fd7f6945a9b6676eef266e3a5f17d1ffa448363
 7
 gradlew,5/b/5bbfa66edb4db3c7c33c5181f43510990d3307f9
+A
+gradle.properties,2/a/2afbb999f001938c88fa43fc2ef52abf0f8213e4
+@
+build.gradle.kts,d/b/dbcff70658daf80b53ce624f6adcaa529df5ed8d
+e
+5app/src/main/java/org/xsafter/xmtpmessenger/Colors.kt,c/1/c181b56a233e4c5bba621e1943c95b4b4dc5a43e
+e
+5app/src/main/java/org/xsafter/xmtpmessenger/Themes.kt,2/b/2b1e8034bdce6528ec2bdbc43e583062ccfc58fe
+i
+9app/src/main/java/org/xsafter/xmtpmessenger/Typography.kt,2/c/2c623ba7d29af48a55a5dd0905032510426c4edd

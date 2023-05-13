@@ -16,6 +16,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
@@ -49,6 +52,7 @@ class MainActivity : AppCompatActivity() {
     private val messagesString = mutableStateListOf<String>()
     private lateinit var conversation: Conversation
     private lateinit var geoConversation: Conversation
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,16 +100,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    suspend fun getMessages(conversation: Conversation): String {
-        var messages = ""
-        conversation.streamMessages().collect {
-            Log.e("msg", "${it.senderAddress}: ${it.body}")
-             messages += "${it.senderAddress}: ${it.body}\n"
-            messagesString.add("${it.senderAddress}: ${it.body}")
-
+    suspend fun getMessages(conversation: Conversation) {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                ConversationHelper(client).streamMessages.collect(::addStreamedItem)
+            }
         }
-
-        return messages
     }
 
     private val locationListener: LocationListener = object : LocationListener {

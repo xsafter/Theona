@@ -45,7 +45,7 @@ junit = "4.13.2"
 kotlin = "1.8.10"
 ksp = "1.8.0-1.0.9"
 maps-compose = "2.5.3"
-material = "1.10.0-alpha02"
+material = "1.9.0"
 # @keep
 minSdk = "21"
 okhttp = "4.10.0"
