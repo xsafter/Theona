@@ -1,4 +1,4 @@
-package org.xsafter.xmtpmessenger
+package org.xsafter.xmtpmessenger.activities
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -16,22 +16,17 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import org.xmtp.android.library.Client
 import org.xmtp.android.library.ClientOptions
 import org.xmtp.android.library.Conversation
@@ -39,6 +34,12 @@ import org.xmtp.android.library.XMTPEnvironment
 import org.xmtp.android.library.messages.PrivateKeyBuilder
 import org.xmtp.android.library.messages.PrivateKeyBundleV1
 import org.xmtp.android.library.messages.PrivateKeyBundleV1Builder
+import org.xsafter.xmtpmessenger.ClientManager
+import org.xsafter.xmtpmessenger.ConversationHelper
+import org.xsafter.xmtpmessenger.GeoMessage
+import org.xsafter.xmtpmessenger.MapView
+import org.xsafter.xmtpmessenger.R
+import org.xsafter.xmtpmessenger.ui.BottomNav
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "keys")
 
@@ -52,6 +53,8 @@ class MainActivity : AppCompatActivity() {
     private val messagesString = mutableStateListOf<String>()
     private lateinit var conversation: Conversation
     private lateinit var geoConversation: Conversation
+
+    private var geoMessage = GeoMessage(37.4226711, -122.0849872)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,29 +86,41 @@ class MainActivity : AppCompatActivity() {
         val conversations = convBuilder.createConversation("0xaE69785837cbc9fB2cf50e6E6419a7044D80eEF3")
 
         conversation = conversations[0]!!
+        //println(conversation.messages(limit = 5))
         geoConversation = conversations[1]!!
     }
 
     private fun loadMessages() {
-        GlobalScope.launch {
+        MainScope().launch {
             getMessages(conversation)
         }
     }
 
     private fun setupUI() {
         setContent {
-            MessengerUI(messagesString) { message ->
-                conversation.send(text = message)
-            }
+            val navController = androidx.navigation.compose.rememberNavController()
+//            MessengerUI(messagesString) { message ->
+//                conversation.send(text = message)
+//            }
+            MapView(geoMessage = geoMessage!!, onLoad = { map: MapView ->
+                map.overlays.add(MyLocationNewOverlay(GpsMyLocationProvider(applicationContext), map))
+            })
+            BottomNav(navController = navController)
         }
     }
 
     suspend fun getMessages(conversation: Conversation) {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                ConversationHelper(client).streamMessages.collect(::addStreamedItem)
+
+        messagesString.add(
+            geoConversation.messages(limit = 25).joinToString("\n") {
+                "${it.senderAddress}: ${it.body}"
             }
+        )
+
+        geoConversation.streamMessages().collect {             //messages += "${it.senderAddress}: ${it.body}\n"
+            messagesString.add("${it.senderAddress}: ${it.body}")
         }
+
     }
 
     private val locationListener: LocationListener = object : LocationListener {
@@ -139,26 +154,7 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_ID) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-
-            }
-        }
-    }
-
-    private fun isLocationEnabled(): Boolean {
-        var locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-    }
-
-    private fun startGeoGetterJob(timeInterval: Long): Job {
-        return CoroutineScope(Dispatchers.Default).launch {
-            while (NonCancellable.isActive) {
-                //val location = getLastLocation()
-                //val jsonGeoMessage = Gson().toJson(GeoMessage(location[0], location[1]))
-                //geoConversation.send(jsonGeoMessage)
-
-                delay(timeInterval)
+                //TODO
             }
         }
     }
@@ -175,8 +171,6 @@ class MainActivity : AppCompatActivity() {
         val keys = dataStore.data.map { preferences ->
             preferences[USER_KEY]
         }.first()
-
-        println(keys)
 
         return keys
     }
@@ -195,7 +189,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            println(keys)
 
             try {
                 if (keys == null) {
@@ -204,7 +197,6 @@ class MainActivity : AppCompatActivity() {
                     val serializedKeys =
                         PrivateKeyBundleV1Builder.encodeData(client.privateKeyBundleV1)
 
-                    println(serializedKeys)
                     runBlocking {
                         storeKeys(serializedKeys)
                     }

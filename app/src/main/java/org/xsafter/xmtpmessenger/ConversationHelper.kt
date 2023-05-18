@@ -1,8 +1,11 @@
 package org.xsafter.xmtpmessenger
 
+import android.util.Log
+import androidx.annotation.UiThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -10,6 +13,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.launch
 import org.xmtp.android.library.Client
 import org.xmtp.android.library.Conversation
 import org.xmtp.android.library.DecodedMessage
@@ -35,7 +39,7 @@ class ConversationHelper(val client: Client) {
     val streamMessages: StateFlow<MessageListItem?> =
         stateFlow(GlobalScope, null) { subscriptionCount ->
             if (mainConversation == null) {
-                mainConversation = ClientManager.client.fetchConversation(TEXT_LABEL)
+                //mainConversation = ClientManager.client.fetchConversation(TEXT_LABEL)
             }
             if (mainConversation != null) {
                 mainConversation!!.streamMessages()
@@ -54,11 +58,37 @@ class ConversationHelper(val client: Client) {
             }
         }
 
+
+    @UiThread
+    fun fetchMessages(conversation: Conversation?, conversationTopic: String) {
+        var conversation = conversation
+        MainScope().launch(Dispatchers.IO) {
+            val listItems = mutableListOf<MessageListItem>()
+            try {
+                if (conversation == null) {
+                    conversation = ClientManager.client.fetchConversation(conversationTopic)
+                }
+                conversation?.let {
+                    listItems.addAll(
+                        it.messages().map { message ->
+                            MessageListItem.Message(message.id, message)
+                        }
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e("ConversationHelper", "Error fetching messages", e)
+            }
+        }
+    }
+
     fun createConversation(contact: String): Array<Conversation?> {
         mainConversation = client.conversations.newConversation(
             contact,
             context = InvitationV1ContextBuilder.buildFromConversation(TEXT_LABEL)
         )
+
+        println(mainConversation!!.messages())
+
         geoConversation = client.conversations.newConversation(
             contact,
             context = InvitationV1ContextBuilder.buildFromConversation(GEO_LABEL)

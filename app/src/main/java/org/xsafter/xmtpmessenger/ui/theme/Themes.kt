@@ -1,8 +1,9 @@
-package org.xsafter.xmtpmessenger
+package org.xsafter.xmtpmessenger.ui.theme
 
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -10,6 +11,41 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import org.xsafter.xmtpmessenger.Blue10
+import org.xsafter.xmtpmessenger.Blue20
+import org.xsafter.xmtpmessenger.Blue30
+import org.xsafter.xmtpmessenger.Blue40
+import org.xsafter.xmtpmessenger.Blue80
+import org.xsafter.xmtpmessenger.Blue90
+import org.xsafter.xmtpmessenger.BlueGrey30
+import org.xsafter.xmtpmessenger.BlueGrey50
+import org.xsafter.xmtpmessenger.BlueGrey60
+import org.xsafter.xmtpmessenger.BlueGrey80
+import org.xsafter.xmtpmessenger.BlueGrey90
+import org.xsafter.xmtpmessenger.DarkBlue10
+import org.xsafter.xmtpmessenger.DarkBlue20
+import org.xsafter.xmtpmessenger.DarkBlue30
+import org.xsafter.xmtpmessenger.DarkBlue40
+import org.xsafter.xmtpmessenger.DarkBlue80
+import org.xsafter.xmtpmessenger.DarkBlue90
+import org.xsafter.xmtpmessenger.Grey10
+import org.xsafter.xmtpmessenger.Grey20
+import org.xsafter.xmtpmessenger.Grey80
+import org.xsafter.xmtpmessenger.Grey90
+import org.xsafter.xmtpmessenger.Grey95
+import org.xsafter.xmtpmessenger.Grey99
+import org.xsafter.xmtpmessenger.Red10
+import org.xsafter.xmtpmessenger.Red20
+import org.xsafter.xmtpmessenger.Red30
+import org.xsafter.xmtpmessenger.Red40
+import org.xsafter.xmtpmessenger.Red80
+import org.xsafter.xmtpmessenger.Red90
+import org.xsafter.xmtpmessenger.Yellow10
+import org.xsafter.xmtpmessenger.Yellow20
+import org.xsafter.xmtpmessenger.Yellow30
+import org.xsafter.xmtpmessenger.Yellow40
+import org.xsafter.xmtpmessenger.Yellow80
+import org.xsafter.xmtpmessenger.Yellow90
 
 private val JetchatDarkColorScheme = darkColorScheme(
     primary = Blue80,
@@ -88,9 +124,9 @@ fun JetchatTheme(
         else -> JetchatLightColorScheme
     }
 
-//    MaterialTheme(
-//        colorScheme = myColorScheme,
-//        typography = JetchatTypography,
-//        content = content
-//    )
+    MaterialTheme(
+        colorScheme = myColorScheme,
+        //typography = JetchatTypography,
+        content = content
+    )
 }
