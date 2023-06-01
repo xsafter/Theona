@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.security.SecureRandom
 import java.security.spec.KeySpec
@@ -51,10 +52,10 @@ class RegisterViewModel (
         return salt
     }
 
-    fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
+    private fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
 
 
-    fun generateHash(password: String, salt: String): String {
+    private fun generateHash(password: String, salt: String): String {
         val combinedSalt = "$salt$SECRET".toByteArray()
 
         val factory: SecretKeyFactory = SecretKeyFactory.getInstance(ALGORITHM)
@@ -63,6 +64,14 @@ class RegisterViewModel (
         val hash: ByteArray = key.encoded
 
         return hash.toHexString()
+    }
+
+    fun isLoggedIn(): Boolean {
+        var isLoggedIn = false
+        viewModelScope.launch {
+            isLoggedIn = dataStore.data.first().contains(usernameKey)
+        }
+        return isLoggedIn
     }
 
 }

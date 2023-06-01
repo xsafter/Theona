@@ -12,7 +12,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.MapView
 
 @Composable
-fun rememberMapViewWithLifecycle(geoMessage: GeoMessage): MapView {
+fun rememberMapViewWithLifecycle(geoMessages: MutableList<GeoMessage>): MapView {
     val context = LocalContext.current
     val mapView = remember {
         MapView(context).apply {
@@ -21,7 +21,7 @@ fun rememberMapViewWithLifecycle(geoMessage: GeoMessage): MapView {
     }
 
     // Makes MapView follow the lifecycle of this composable
-    val lifecycleObserver = rememberMapLifecycleObserver(mapView, geoMessage)
+    val lifecycleObserver = rememberMapLifecycleObserver(mapView, geoMessages)
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     DisposableEffect(lifecycle) {
         lifecycle.addObserver(lifecycleObserver)
@@ -34,7 +34,7 @@ fun rememberMapViewWithLifecycle(geoMessage: GeoMessage): MapView {
 }
 
 @Composable
-fun rememberMapLifecycleObserver(mapView: MapView, geoMessage: GeoMessage): LifecycleEventObserver =
+fun rememberMapLifecycleObserver(mapView: MapView, geoMessages: MutableList<GeoMessage>): LifecycleEventObserver =
     remember(mapView) {
         LifecycleEventObserver { _, event ->
             when (event) {

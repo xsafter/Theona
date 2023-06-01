@@ -13,6 +13,7 @@ val Context.credentialsDataStore: DataStore<Preferences> by preferencesDataStore
 class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             RegisterScreen(viewModel = RegisterViewModel(credentialsDataStore))
         }

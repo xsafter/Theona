@@ -3,16 +3,7 @@ package org.xsafter.xmtpmessenger
 import android.util.Log
 import androidx.annotation.UiThread
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import org.xmtp.android.library.Client
 import org.xmtp.android.library.Conversation
@@ -34,29 +25,6 @@ class ConversationHelper(val client: Client) {
         data class Message(override val id: String, val message: DecodedMessage) :
             MessageListItem(id, ITEM_TYPE_MESSAGE)
     }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val streamMessages: StateFlow<MessageListItem?> =
-        stateFlow(GlobalScope, null) { subscriptionCount ->
-            if (mainConversation == null) {
-                //mainConversation = ClientManager.client.fetchConversation(TEXT_LABEL)
-            }
-            if (mainConversation != null) {
-                mainConversation!!.streamMessages()
-                    .flowWhileShared(
-                        subscriptionCount,
-                        SharingStarted.WhileSubscribed(1000L)
-                    )
-                    .flowOn(Dispatchers.IO)
-                    .distinctUntilChanged()
-                    .mapLatest { message ->
-                        MessageListItem.Message(message.id, message)
-                    }
-                    .catch { emptyFlow<MessageListItem>() }
-            } else {
-                emptyFlow()
-            }
-        }
 
 
     @UiThread
