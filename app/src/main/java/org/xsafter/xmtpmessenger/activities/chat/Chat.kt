@@ -41,8 +41,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -51,6 +53,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LastBaseline
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
@@ -59,7 +62,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
-import org.xsafter.xmtpmessenger.data.exampleUiState
+import kotlinx.coroutines.runBlocking
+import org.xsafter.xmtpmessenger.activities.viewmodels.ChatViewModel
 import org.xsafter.xmtpmessenger.data.me
 import org.xsafter.xmtpmessenger.ui.components.AppBar
 import org.xsafter.xmtpmessenger.ui.components.chat.ChatUIState
@@ -73,6 +77,8 @@ import org.xsafter.xmtpmessenger.ui.theme.JetchatTheme
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ConversationContent(
+    userId: String,
+    viewModel: ChatViewModel = ChatViewModel(userId, LocalContext.current),
     uiState: ChatUIState,
     navigateToProfile: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -81,6 +87,17 @@ fun ConversationContent(
     val authorMe = "me"
     val timeNow = "now"
 
+    runBlocking {
+        viewModel.setupConversations()
+    }
+
+    val messagesState by viewModel.messages.observeAsState(emptyList())
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.fetchMessages()
+    }
+
+    uiState.messages = messagesState
     val scrollState = rememberLazyListState()
     val topBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState)
@@ -459,10 +476,10 @@ fun ClickableMessage(
 @Composable
 fun ConversationPreview() {
     JetchatTheme {
-        ConversationContent(
-            uiState = exampleUiState,
-            navigateToProfile = { }
-        )
+//        ConversationContent(
+//            uiState = exampleUiState,
+//            navigateToProfile = { }
+//        )
     }
 }
 

@@ -2,7 +2,6 @@ package org.xsafter.xmtpmessenger.activities.viewmodels
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -10,20 +9,16 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.xmtp.android.library.Client
 import org.xmtp.android.library.ClientOptions
-import org.xmtp.android.library.Conversation
 import org.xmtp.android.library.XMTPEnvironment
 import org.xmtp.android.library.messages.PrivateKeyBuilder
 import org.xmtp.android.library.messages.PrivateKeyBundleV1
 import org.xmtp.android.library.messages.PrivateKeyBundleV1Builder
 import org.xsafter.xmtpmessenger.ClientManager
-import org.xsafter.xmtpmessenger.ConversationHelper
 import org.xsafter.xmtpmessenger.data.me
 import org.xsafter.xmtpmessenger.ui.components.createFromObject
 import javax.inject.Inject
@@ -42,39 +37,7 @@ class MainViewModel @Inject constructor(
 
     lateinit var client: Client
     private val options = ClientOptions(api = ClientOptions.Api(env = XMTPEnvironment.PRODUCTION, isSecure = true))
-    public val messagesString = mutableStateListOf<String>()
-    public lateinit var conversation: Conversation
-    public lateinit var geoConversation: Conversation
 
-
-    fun setupConversations() {
-        val convBuilder = ConversationHelper(client)
-        val conversations = convBuilder.createConversation("0xaE69785837cbc9fB2cf50e6E6419a7044D80eEF3")
-
-        conversation = conversations[0]!!
-        //println(conversation.messages(limit = 5))
-        geoConversation = conversations[1]!!
-    }
-
-    fun loadMessages() {
-        MainScope().launch {
-            getMessages(conversation)
-        }
-    }
-
-    suspend fun getMessages(conversation: Conversation) {
-
-        messagesString.add(
-            geoConversation.messages(limit = 25).joinToString("\n") {
-                "${it.senderAddress}: ${it.body}"
-            }
-        )
-
-        geoConversation.streamMessages().collect {             //messages += "${it.senderAddress}: ${it.body}\n"
-            messagesString.add("${it.senderAddress}: ${it.body}")
-        }
-
-    }
 
     suspend fun storeKeys(serializedKeys: String) {
         context.dataStore.edit { settings ->
@@ -134,14 +97,12 @@ class MainViewModel @Inject constructor(
 
             ClientManager.createClient(keys.toString())
 
+            Log.d("xmtp", "Client created")
+
             me.username = client.address
             me.avatar = createFromObject(client.address)
 
             Log.d("xmtp", account.address)
         }
-    }
-
-    fun send(message: String) {
-        conversation.send(message)
     }
 }

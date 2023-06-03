@@ -12,8 +12,6 @@ p
 @app/src/test/java/org/xsafter/xmtpmessenger/ExampleUnitTest.java,2/f/2fd7f6945a9b6676eef266e3a5f17d1ffa448363
 7
 gradlew,5/b/5bbfa66edb4db3c7c33c5181f43510990d3307f9
-l
-<app/src/main/java/org/xsafter/xmtpmessenger/ClientManager.kt,7/0/70724227e12265b2f44a7594c3ee47c3e54cf601
 e
 5app/src/main/java/org/xsafter/xmtpmessenger/Colors.kt,c/1/c181b56a233e4c5bba621e1943c95b4b4dc5a43e
 m

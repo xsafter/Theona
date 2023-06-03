@@ -102,7 +102,7 @@ object EMOJIS {
 }
 
 val exampleUiState = ChatUIState(
-    initialMessages = initialMessages,
+    initialMessages = initialMessages.toMutableList(),
     channelName = "#composers",
     channelMembers = 42
 )

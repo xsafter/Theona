@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.gson.Gson
 import org.xsafter.xmtpmessenger.GeoMessage
 import org.xsafter.xmtpmessenger.R
 import org.xsafter.xmtpmessenger.activities.viewmodels.MainViewModel
@@ -33,8 +32,6 @@ class MainActivity : AppCompatActivity() {
         mainViewModel = MainViewModel(this)
         mainViewModel.initializeClient()
         setupLocationServices()
-        mainViewModel.setupConversations()
-        mainViewModel.loadMessages()
         setupUI()
     }
 
@@ -70,7 +67,6 @@ class MainActivity : AppCompatActivity() {
 
     private val locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
-            mainViewModel.send(Gson().toJson(GeoMessage(location.latitude, location.longitude)))
         }
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
         override fun onProviderEnabled(provider: String) {}
