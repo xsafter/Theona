@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import org.xsafter.xmtpmessenger.activities.viewmodels.RegisterViewModel
 
 val Context.credentialsDataStore: DataStore<Preferences> by preferencesDataStore(name = "credentials")
 

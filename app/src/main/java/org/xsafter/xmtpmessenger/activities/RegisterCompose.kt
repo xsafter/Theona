@@ -38,6 +38,7 @@ import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
 import org.xsafter.xmtpmessenger.R
+import org.xsafter.xmtpmessenger.activities.viewmodels.RegisterViewModel
 
 @Composable
 //@Preview

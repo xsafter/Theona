@@ -12,13 +12,9 @@ import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import org.xsafter.xmtpmessenger.GeoMessage
-import org.xsafter.xmtpmessenger.MapView
-import org.xsafter.xmtpmessenger.MessengerUI
 import org.xsafter.xmtpmessenger.R
+import org.xsafter.xmtpmessenger.activities.viewmodels.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -58,14 +54,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupUI() {
         setContent {
-            val navController = androidx.navigation.compose.rememberNavController()
-            val messagesUI = MessengerUI(mainViewModel.messagesString) { message ->
-                mainViewModel.conversation.send(text = message)
-            }
-            val mapView = MapView(geoMessage = geoMessage!!, onLoad = { map: MapView ->
-                map.overlays.add(MyLocationNewOverlay(GpsMyLocationProvider(applicationContext), map))
-            })
+//            val navController = androidx.navigation.compose.rememberNavController()
+//            val messagesUI = MessengerUI(mainViewModel.messagesString) { message ->
+//                mainViewModel.conversation.send(text = message)
+//            }
+//            val mapView = MapView(geoMessage = geoMessage!!, onLoad = { map: MapView ->
+//                map.overlays.add(MyLocationNewOverlay(GpsMyLocationProvider(applicationContext), map))
+//            })
             //BottomNav(navController = navController, ::messagesUI, ::mapView)
+
+            Main(client = mainViewModel.client)
         }
     }
 

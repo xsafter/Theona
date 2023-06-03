@@ -1,4 +1,4 @@
-package org.xsafter.xmtpmessenger.activities
+package org.xsafter.xmtpmessenger.activities.viewmodels
 
 import android.content.Context
 import android.util.Log
@@ -24,6 +24,8 @@ import org.xmtp.android.library.messages.PrivateKeyBundleV1
 import org.xmtp.android.library.messages.PrivateKeyBundleV1Builder
 import org.xsafter.xmtpmessenger.ClientManager
 import org.xsafter.xmtpmessenger.ConversationHelper
+import org.xsafter.xmtpmessenger.data.me
+import org.xsafter.xmtpmessenger.ui.components.createFromObject
 import javax.inject.Inject
 
 
@@ -38,11 +40,12 @@ class MainViewModel @Inject constructor(
 
     private val USER_KEY = stringPreferencesKey("user_key")
 
-    private lateinit var client: Client
+    lateinit var client: Client
     private val options = ClientOptions(api = ClientOptions.Api(env = XMTPEnvironment.PRODUCTION, isSecure = true))
     public val messagesString = mutableStateListOf<String>()
     public lateinit var conversation: Conversation
     public lateinit var geoConversation: Conversation
+
 
     fun setupConversations() {
         val convBuilder = ConversationHelper(client)
@@ -130,6 +133,9 @@ class MainViewModel @Inject constructor(
             PrivateKeyBundleV1Builder.encodeData(client!!.privateKeyBundleV1)
 
             ClientManager.createClient(keys.toString())
+
+            me.username = client.address
+            me.avatar = createFromObject(client.address)
 
             Log.d("xmtp", account.address)
         }

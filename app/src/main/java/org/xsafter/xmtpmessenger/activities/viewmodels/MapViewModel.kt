@@ -1,4 +1,4 @@
-package org.xsafter.xmtpmessenger.activities
+package org.xsafter.xmtpmessenger.activities.viewmodels
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

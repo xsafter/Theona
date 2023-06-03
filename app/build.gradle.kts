@@ -63,6 +63,8 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.ui.graphics)
+    implementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(platform(libs.androidx.compose.bom))
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
@@ -117,14 +119,13 @@ dependencies {
 
     implementation ("androidx.compose.material3:material3:1.1.0")
 
-    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation(libs.coil.kt.compose)
     implementation("io.coil-kt:coil-svg:2.2.2")
     implementation("dev.chrisbanes.accompanist:accompanist-coil:0.6.2")
 
     implementation(libs.androidx.navigation.compose)
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
-
 }
 
 kapt {

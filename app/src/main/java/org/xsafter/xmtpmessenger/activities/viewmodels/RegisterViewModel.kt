@@ -1,4 +1,4 @@
-package org.xsafter.xmtpmessenger.activities
+package org.xsafter.xmtpmessenger.activities.viewmodels
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

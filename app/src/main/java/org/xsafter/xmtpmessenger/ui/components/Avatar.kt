@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import dev.chrisbanes.accompanist.coil.CoilImage
+import coil.compose.AsyncImage
 import org.xsafter.xmtpmessenger.R
 
 
@@ -77,14 +77,13 @@ fun CircleImage(
     imageData: Any,
     modifier: Modifier = Modifier
 ) {
-    CoilImage(
-        data = imageData,
+    AsyncImage(
+        model =  imageData,
         contentDescription = null,
         modifier = modifier
             .aspectRatio(1f)
             .clip(CircleShape),
         contentScale = ContentScale.Crop,
-        fadeIn = true
     )
 }
 
