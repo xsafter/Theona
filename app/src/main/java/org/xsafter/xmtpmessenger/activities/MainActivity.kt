@@ -16,6 +16,7 @@ import org.xsafter.xmtpmessenger.GeoMessage
 import org.xsafter.xmtpmessenger.R
 import org.xsafter.xmtpmessenger.activities.viewmodels.MainViewModel
 import org.xsafter.xmtpmessenger.data.ClientSingleton
+import org.xsafter.xmtpmessenger.data.me
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,7 +35,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         mainViewModel = MainViewModel(this)
-        mainViewModel.initializeClient()
+        if (clientSingleton.client == null)
+            mainViewModel.initializeClient()
         setupLocationServices()
         setupUI()
         val client = mainViewModel.client
@@ -67,6 +69,7 @@ class MainActivity : AppCompatActivity() {
             //BottomNav(navController = navController, ::messagesUI, ::mapView)
 
             Main(client = mainViewModel.client)
+            Log.e("My adress", "${mainViewModel.client.address}, ${me.id}")
         }
     }
 

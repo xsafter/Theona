@@ -1,6 +1,7 @@
 package org.xsafter.xmtpmessenger.activities.viewmodels
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,7 +14,7 @@ import org.xsafter.xmtpmessenger.ui.components.createFromObject
 
 class ChatViewModel(private val userId: String,
                     private val context: Context,
-                    private val client: Client) : ViewModel() {
+                    val client: Client) : ViewModel() {
     private val _messages = MutableLiveData<List<Message>>()
     val messages: LiveData<List<Message>> = _messages
 
@@ -37,10 +38,16 @@ class ChatViewModel(private val userId: String,
             Message(
                 message.senderAddress,
                 message.body,
-                message.sent.time.toString(),
+                message.sent.time,
                 authorAvatar = createFromObject(message.senderAddress)
             )
         }
         _messages.postValue(fetchedMessages)
+    }
+
+    fun sendMessage(message: String, image: Bitmap? = null) {
+        if (image != null)
+            conversation.send(image)
+        conversation.send(message)
     }
 }

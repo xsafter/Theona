@@ -1,14 +1,13 @@
 package org.xsafter.xmtpmessenger.activities.chat
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.xmtp.android.library.Client
-import org.xsafter.xmtpmessenger.activities.MainActivity
 import org.xsafter.xmtpmessenger.data.ClientSingleton
-import org.xsafter.xmtpmessenger.data.exampleUiState
+import org.xsafter.xmtpmessenger.ui.components.chat.ChatUIState
 import org.xsafter.xmtpmessenger.ui.theme.JetchatTheme
 import javax.inject.Inject
 
@@ -25,16 +24,21 @@ class ChatActivity : ComponentActivity() {
 
         setContent {
             JetchatTheme {
+                val navController = rememberNavController()
+
                 ConversationContent(
                     client,
                     userId = userId!!,
-                    uiState = exampleUiState,
+                    uiState = ChatUIState(
+                        userId.take(5),
+                        2,
+                        mutableListOf()
+                    ),
                     navigateToProfile = { user ->
 
                     },
                     onNavIconPressed = {
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
+                        navController.navigateUp()
                     }
                 )
             }

@@ -6,7 +6,6 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -15,7 +14,7 @@ import androidx.compose.ui.unit.dp
 fun Routing.Main.BottomBar(
     currentRouting: Routing.Main.BottomNav,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
-    contentColor: Color = contentColorFor(backgroundColor),
+    contentColor: Color = MaterialTheme.colorScheme.primary,
     onSelected: (routing: Routing.Main.BottomNav) -> Unit = { }
 ) {
     BottomNavigation(

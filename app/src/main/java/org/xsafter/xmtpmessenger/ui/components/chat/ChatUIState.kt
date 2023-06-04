@@ -21,7 +21,7 @@ class ChatUIState(
 data class Message(
     val author: String,
     val content: String,
-    val timestamp: String,
+    val timestamp: Long,
     val image: Bitmap? = null,
     val authorAvatar: Bitmap
 )

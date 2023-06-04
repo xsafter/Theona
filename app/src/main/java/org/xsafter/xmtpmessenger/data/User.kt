@@ -45,26 +45,26 @@ private val initialMessages = listOf(
     Message(
         "me",
         "Check it out!",
-        "8:07 PM",
+        1683606059000,
         authorAvatar = createSquareBlackBitmap(100, 100)
     ),
     Message(
         "me",
         "Thank you!$EMOJI_PINK_HEART",
-        "8:06 PM",
+        1664041808000,
         createSquareBlackBitmap(100, 100),
         createSquareBlackBitmap(100, 100)
     ),
     Message(
         "Taylor Brooks",
         "You can use all the same stuff",
-        "8:05 PM",
+        1672692699000,
         authorAvatar = createSquareBlackBitmap(100, 100)
     ),
     Message(
         "Taylor Brooks",
         "@aliconors Take a look at the `Flow.collectAsStateWithLifecycle()` APIs",
-        "8:05 PM",
+        1669428740000,
         authorAvatar = createSquareBlackBitmap(100, 100)
     ),
     Message(
@@ -73,13 +73,13 @@ private val initialMessages = listOf(
                 "Most blog posts end up out of date pretty fast but this sample is always up to " +
                 "date and deals with async data loading (it's faked but the same idea " +
                 "applies) $EMOJI_POINTS https://goo.gle/jetnews",
-        "8:04 PM",
+        1668972501000,
         authorAvatar = createSquareBlackBitmap(100, 100)
     ),
     Message(
         "me",
         "Compose newbie: I’ve scourged the internet for tutorials about async data loading but haven’t found any good ones $EMOJI_MELTING $EMOJI_CLOUDS. What’s the recommended way to load async data and emit composable widgets?",
-        "8:03 PM",
+        1664625975000,
         authorAvatar = createSquareBlackBitmap(100, 100)
     )
 )

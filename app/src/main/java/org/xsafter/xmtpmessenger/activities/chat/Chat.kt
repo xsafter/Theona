@@ -74,6 +74,9 @@ import org.xsafter.xmtpmessenger.ui.components.chat.SymbolAnnotationType
 import org.xsafter.xmtpmessenger.ui.components.chat.UserInput
 import org.xsafter.xmtpmessenger.ui.components.chat.messageFormatter
 import org.xsafter.xmtpmessenger.ui.theme.JetchatTheme
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -87,7 +90,7 @@ fun ConversationContent(
     onNavIconPressed: () -> Unit = { }
 ) {
     val authorMe = "me"
-    val timeNow = "now"
+    val timeNow = System.currentTimeMillis()
 
     runBlocking {
         viewModel.setupConversations()
@@ -121,9 +124,13 @@ fun ConversationContent(
             .exclude(WindowInsets.ime),
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { paddingValues ->
-        Column(Modifier.fillMaxSize().padding(paddingValues)) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(paddingValues)) {
             Messages(
-                messages = uiState.messages,
+                viewModel,
+                messages = uiState.messages.toMutableList(),
                 navigateToProfile = navigateToProfile,
                 modifier = Modifier.weight(1f),
                 scrollState = scrollState
@@ -133,6 +140,8 @@ fun ConversationContent(
                     uiState.addMessage(
                         Message(authorMe, content, timeNow, me.avatar, me.avatar)
                     )
+
+                    viewModel.sendMessage(content)
                 },
                 resetScroll = {
                     scope.launch {
@@ -141,7 +150,9 @@ fun ConversationContent(
                 },
                 // let this element handle the padding so that the elevation is shown behind the
                 // navigation bar
-                modifier = Modifier.navigationBarsPadding().imePadding()
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .imePadding()
             )
         }
     }
@@ -204,7 +215,8 @@ const val ConversationTestTag = "ConversationTestTag"
 
 @Composable
 fun Messages(
-    messages: List<Message>,
+    chatViewModel: ChatViewModel,
+    messages: MutableList<Message>,
     navigateToProfile: (String) -> Unit,
     scrollState: LazyListState,
     modifier: Modifier = Modifier
@@ -212,7 +224,7 @@ fun Messages(
     val scope = rememberCoroutineScope()
     Box(modifier = modifier) {
 
-        val authorMe = "me"
+        val authorMe = chatViewModel.client.address
         LazyColumn(
             reverseLayout = true,
             state = scrollState,
@@ -226,15 +238,12 @@ fun Messages(
                 val content = messages[index]
                 val isFirstMessageByAuthor = prevAuthor != content.author
                 val isLastMessageByAuthor = nextAuthor != content.author
-
-                // Hardcode day dividers for simplicity
-                if (index == messages.size - 1) {
+                val messageDate = messages.getOrNull(index)?.timestamp
+                val prevMessageDate = messages.getOrNull(index - 1)?.timestamp
+                val nextMessageDate = messages.getOrNull(index + 1)?.timestamp
+                if (nextMessageDate == null && messageDate != null) {
                     item {
-                        DayHeader("20 Aug")
-                    }
-                } else if (index == 2) {
-                    item {
-                        DayHeader("Today")
+                        DayHeader(fancyDateString(messageDate))
                     }
                 }
 
@@ -354,7 +363,7 @@ private fun AuthorNameTimestamp(msg: Message) {
     // Combine author and timestamp for a11y.
     Row(modifier = Modifier.semantics(mergeDescendants = true) {}) {
         Text(
-            text = msg.author,
+            text = msg.author.take(7),
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .alignBy(LastBaseline)
@@ -362,7 +371,7 @@ private fun AuthorNameTimestamp(msg: Message) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = msg.timestamp,
+            text = SimpleDateFormat("HH:mm").format(Date(msg.timestamp)).toString(),
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.alignBy(LastBaseline),
             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -387,6 +396,22 @@ fun DayHeader(dayString: String) {
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         DayHeaderLine()
+    }
+}
+
+@Composable
+fun NoLineDayHeader(dayString: String) {
+    Row(
+        modifier = Modifier
+            .padding(vertical = 8.dp, horizontal = 16.dp)
+            .height(16.dp)
+    ) {
+        Text(
+            text = dayString,
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
@@ -501,3 +526,20 @@ fun DayHeaderPrev() {
 }
 
 private val JumpToBottomThreshold = 56.dp
+
+
+fun fancyDateString(timestamp: Long): String {
+    val currentDate = Date()
+    val targetDate = Date(timestamp) // Convert seconds to milliseconds
+
+    val dateFormat = SimpleDateFormat("MMM d", Locale.getDefault())
+    val today = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(currentDate)
+    val yesterday = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date(currentDate.time - 86400000))
+    val targetDay = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(targetDate)
+
+    return when (targetDay) {
+        today -> "today"
+        yesterday -> "yesterday"
+        else -> dateFormat.format(targetDate)
+    }
+}
