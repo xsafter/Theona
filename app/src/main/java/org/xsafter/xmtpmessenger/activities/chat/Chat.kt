@@ -63,6 +63,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.xmtp.android.library.Client
 import org.xsafter.xmtpmessenger.activities.viewmodels.ChatViewModel
 import org.xsafter.xmtpmessenger.data.me
 import org.xsafter.xmtpmessenger.ui.components.AppBar
@@ -77,8 +78,9 @@ import org.xsafter.xmtpmessenger.ui.theme.JetchatTheme
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ConversationContent(
+    client: Client,
     userId: String,
-    viewModel: ChatViewModel = ChatViewModel(userId, LocalContext.current),
+    viewModel: ChatViewModel = ChatViewModel(userId, LocalContext.current, client),
     uiState: ChatUIState,
     navigateToProfile: (String) -> Unit,
     modifier: Modifier = Modifier,

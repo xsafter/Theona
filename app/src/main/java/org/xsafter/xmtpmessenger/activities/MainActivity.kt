@@ -11,10 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import dagger.hilt.android.AndroidEntryPoint
 import org.xsafter.xmtpmessenger.GeoMessage
 import org.xsafter.xmtpmessenger.R
 import org.xsafter.xmtpmessenger.activities.viewmodels.MainViewModel
+import org.xsafter.xmtpmessenger.data.ClientSingleton
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val PERMISSION_ID = 143
@@ -24,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private var geoMessage = GeoMessage(37.4226711, -122.0849872)
 
-
+    @Inject lateinit var clientSingleton: ClientSingleton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.initializeClient()
         setupLocationServices()
         setupUI()
+        val client = mainViewModel.client
+        clientSingleton.client = client
     }
 
     private fun setupLocationServices() {

@@ -1,6 +1,5 @@
 package org.xsafter.xmtpmessenger
 
-import androidx.annotation.UiThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +26,6 @@ object ClientManager {
             throw IllegalStateException("Client called before Ready state")
         }
 
-    @UiThread
     fun createClient(encodedPrivateKeyData: String) {
         if (clientState.value is ClientState.Ready) return
         GlobalScope.launch(Dispatchers.IO) {
@@ -42,7 +40,6 @@ object ClientManager {
         }
     }
 
-    @UiThread
     fun clearClient() {
         _clientState.value = ClientState.Unknown
         _client = null
