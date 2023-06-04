@@ -12,7 +12,7 @@ import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
-import org.xsafter.xmtpmessenger.GeoMessage
+import org.xsafter.xmtpmessenger.data.GeoMessage
 import org.xsafter.xmtpmessenger.R
 import org.xsafter.xmtpmessenger.activities.viewmodels.MainViewModel
 import org.xsafter.xmtpmessenger.data.ClientSingleton
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 //            })
             //BottomNav(navController = navController, ::messagesUI, ::mapView)
 
-            Main(client = mainViewModel.client)
+            Main(client = clientSingleton.client!!)
             Log.e("My adress", "${mainViewModel.client.address}, ${me.id}")
         }
     }
