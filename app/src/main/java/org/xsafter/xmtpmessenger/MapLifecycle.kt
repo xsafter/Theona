@@ -10,9 +10,10 @@ import androidx.lifecycle.LifecycleEventObserver
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.MapView
+import org.xsafter.xmtpmessenger.data.GeoMessageWrapper
 
 @Composable
-fun rememberMapViewWithLifecycle(geoMessages: MutableList<GeoMessage>): MapView {
+fun rememberMapViewWithLifecycle(geoMessages: MutableList<GeoMessageWrapper>): MapView {
     val context = LocalContext.current
     val mapView = remember {
         MapView(context).apply {
@@ -34,7 +35,7 @@ fun rememberMapViewWithLifecycle(geoMessages: MutableList<GeoMessage>): MapView 
 }
 
 @Composable
-fun rememberMapLifecycleObserver(mapView: MapView, geoMessages: MutableList<GeoMessage>): LifecycleEventObserver =
+fun rememberMapLifecycleObserver(mapView: MapView, geoMessages: MutableList<GeoMessageWrapper>): LifecycleEventObserver =
     remember(mapView) {
         LifecycleEventObserver { _, event ->
             when (event) {

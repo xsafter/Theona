@@ -19,7 +19,6 @@ class ChatViewModel(private val userId: String,
     val messages: LiveData<List<Message>> = _messages
 
     public lateinit var conversation: Conversation
-    public lateinit var geoConversation: Conversation
 
 
     fun setupConversations() {
@@ -30,7 +29,7 @@ class ChatViewModel(private val userId: String,
 
         conversation = conversations[0]!!
         //println(conversation.messages(limit = 5))
-        geoConversation = conversations[1]!!
+
     }
 
     fun fetchMessages() {

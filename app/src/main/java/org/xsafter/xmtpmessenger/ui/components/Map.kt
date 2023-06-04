@@ -7,14 +7,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import org.osmdroid.views.MapView
-import org.xsafter.xmtpmessenger.GeoMessage
+import org.xsafter.xmtpmessenger.data.GeoMessage
+import org.xsafter.xmtpmessenger.data.GeoMessageWrapper
 import org.xsafter.xmtpmessenger.rememberMapViewWithLifecycle
 import org.xsafter.xmtpmessenger.ui.Routing
 
 @Composable
 fun Routing.Main.BottomNav.Map.Content(
     modifier: Modifier = Modifier,
-    geoMessages: MutableList<GeoMessage>,
+    geoMessages: MutableList<GeoMessageWrapper>,
     onUserClick: (() -> Unit)? = null,
     onSearchClick: (() -> Unit)? = null,
     onLoad: ((map: MapView) -> Unit)? = null

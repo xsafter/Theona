@@ -74,6 +74,8 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.ui.graphics)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(platform(libs.androidx.compose.bom))
     val composeBom = platform(libs.androidx.compose.bom)
