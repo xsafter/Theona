@@ -1,6 +1,5 @@
 package org.xsafter.xmtpmessenger.activities
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -33,7 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
+import androidx.navigation.NavHostController
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
@@ -42,7 +41,10 @@ import org.xsafter.xmtpmessenger.activities.viewmodels.RegisterViewModel
 
 @Composable
 //@Preview
-fun RegisterScreen(viewModel: RegisterViewModel) {
+fun RegisterScreen(
+    viewModel: RegisterViewModel,
+    navController: NavHostController
+) {
     val usernameState = remember { mutableStateOf(TextFieldValue()) }
     val passwordState = remember { mutableStateOf(TextFieldValue()) }
     val confirmPasswordState = remember { mutableStateOf(TextFieldValue()) }
@@ -128,8 +130,7 @@ fun RegisterScreen(viewModel: RegisterViewModel) {
         Spacer(modifier = Modifier.height(16.dp))
 
 
-        val intent = Intent(LocalContext.current, MainActivity::class.java)
-        val context = LocalContext.current
+
         Button(
             onClick = {
                       if (! usernameState.value.text.isEmpty() && ! passwordState.value.text.isEmpty() && ! confirmPasswordState.value.text.isEmpty()
@@ -138,7 +139,7 @@ fun RegisterScreen(viewModel: RegisterViewModel) {
 
 
                           viewModel.saveCredentials(usernameState.value.text, passwordState.value.text)
-                          startActivity(context, intent, null)
+                          navController.navigate("main")
                       }
             },
             modifier = Modifier

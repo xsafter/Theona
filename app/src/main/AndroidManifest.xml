@@ -20,11 +20,6 @@
         android:theme="@style/Theme.XMTPMessenger"
         tools:targetApi="31">
         <activity
-            android:name=".activities.AddContactActivity"
-            android:exported="false"
-            android:label="@string/title_activity_add_contact"
-            android:theme="@style/Theme.XMTPMessenger" />
-        <activity
             android:name=".activities.chat.ChatActivity"
             android:exported="false"
             android:label="@string/title_activity_main2"
@@ -34,11 +29,6 @@
             android:exported="true"
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.XMTPMessenger">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activities.MainActivity"
@@ -51,4 +41,5 @@
         </activity>
     </application>
 
+    
 </manifest>
