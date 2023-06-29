@@ -1,6 +1,5 @@
 package org.xsafter.xmtpmessenger.activities
 
-import android.content.Intent
 import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -38,10 +37,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import org.xmtp.android.library.Client
-import org.xsafter.xmtpmessenger.activities.chat.ChatActivity
 import org.xsafter.xmtpmessenger.data.User
 import org.xsafter.xmtpmessenger.data.me
 import org.xsafter.xmtpmessenger.ui.Routing
@@ -84,7 +83,8 @@ fun Routing.Main.BottomNav.Chats.Content(
                 isOnline = false,
                 modifier = Modifier
                     .clickable(onClick = { onChatClick(user) })
-                    .focusProperties { canFocus = true }
+                    .focusProperties { canFocus = true },
+                navController = navController
             )
         }
     }
@@ -116,7 +116,8 @@ fun ChatItem(
     lastMessage: String,
     dateTime: String,
     isOnline: Boolean = false,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavHostController
 ) {
 
     val interactionSource = MutableInteractionSource()
@@ -128,11 +129,6 @@ fun ChatItem(
     val coroutineScope = rememberCoroutineScope()
 
     val context = LocalContext.current
-
-    val chatIntent = Intent(
-        context,
-        ChatActivity::class.java
-                )
 
     Row(
         modifier = modifier
@@ -153,8 +149,7 @@ fun ChatItem(
                         animationSpec = tween(100),
                     )
 
-                    chatIntent.putExtra("id", user.username)
-                    context.startActivity(chatIntent)
+                    navController.navigate("chat/${user.username}")
                 }
             }
                 ) {
@@ -245,5 +240,6 @@ fun ChatItem() {
         me,
         "Hey there",
         "17:45",
+        navController = rememberNavController()
     )
 }

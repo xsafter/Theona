@@ -60,6 +60,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -83,6 +84,7 @@ import java.util.Locale
 fun ConversationContent(
     client: Client,
     userId: String,
+    navController: NavHostController,
     viewModel: ChatViewModel = ChatViewModel(userId, LocalContext.current, client),
     uiState: ChatUIState,
     navigateToProfile: (String) -> Unit,

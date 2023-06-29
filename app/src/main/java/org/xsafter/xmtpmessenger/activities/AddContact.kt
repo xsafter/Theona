@@ -1,6 +1,5 @@
 package org.xsafter.xmtpmessenger.activities
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import org.xsafter.xmtpmessenger.activities.viewmodels.AddContactViewModel
 
@@ -31,8 +29,7 @@ fun AddContactScreen(viewModel: AddContactViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        val context = LocalContext.current
-        val intent = Intent(context, MainActivity_GeneratedInjector {  }::class.java)
+
         Icon(
             imageVector = Icons.Default.PersonAdd,
             contentDescription = "Add Contact Icon",
@@ -58,7 +55,7 @@ fun AddContactScreen(viewModel: AddContactViewModel) {
         Button(
             onClick = {
                       viewModel.addUser()
-                context.startActivity(intent)
+
             },
             modifier = Modifier.padding(top = 16.dp)
         ) {

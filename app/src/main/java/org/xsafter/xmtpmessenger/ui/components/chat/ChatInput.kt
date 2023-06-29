@@ -193,7 +193,7 @@ private fun SelectorExpanded(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun FunctionalityNotAvailablePanel() {
-
+    // Only for preview
 }
 
 @Composable
