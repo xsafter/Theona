@@ -6,18 +6,19 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class TheonaApplication : Application() {
-    init {
-        instance = this
-    }
+
     companion object {
-        private var instance: TheonaApplication? = null
-        fun applicationContext() : Context {
-            return instance!!.applicationContext
-        }
+        lateinit var instance: TheonaApplication
+            private set
+        var isAppRunning = false
+        lateinit var appContext: Context
     }
 
     override fun onCreate() {
         super.onCreate()
-        val context: Context = TheonaApplication.applicationContext()
+
+        instance = this
+        appContext = this
     }
+    
 }

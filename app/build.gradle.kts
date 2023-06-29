@@ -4,7 +4,6 @@ plugins {
 
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
-
 }
 
 android {
@@ -27,21 +26,11 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
-        getByName("release") {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android.txt"),
-                "proguard-rules.pro"
-            )
-        }
-
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -68,14 +57,11 @@ android {
 
 
 dependencies {
-
-    implementation(libs.lifecycle.runtime.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.ui.graphics)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(platform(libs.androidx.compose.bom))
+    testImplementation("org.testng:testng:6.9.6")
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(platform(libs.androidx.compose.bom))
     val composeBom = platform(libs.androidx.compose.bom)
@@ -91,7 +77,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.androidx.lifecycle.viewModelCompose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.google.android.material)
@@ -103,7 +88,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.ui.util)
     implementation(libs.androidx.compose.ui.viewbinding)
-    implementation(libs.androidx.compose.ui.googlefonts)
 
     implementation(libs.androidx.compose.material)
 
@@ -120,7 +104,6 @@ dependencies {
     implementation(libs.androidx.constraintlayout.compose)
 
     implementation("org.xmtp:android:0.0.9")
-    implementation (libs.tink)
 
     implementation(libs.androidx.datastore.preferences)
     implementation (libs.play.services.location)
@@ -129,15 +112,14 @@ dependencies {
 
     implementation(libs.osmdroid.android)
 
-    implementation ("androidx.compose.material3:material3:1.1.0")
+    implementation (libs.androidx.material3)
 
     implementation(libs.coil.kt.compose)
-    implementation("io.coil-kt:coil-svg:2.2.2")
-    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.6.2")
+    implementation(libs.coil.svg)
 
     implementation(libs.androidx.navigation.compose)
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }
 
 kapt {
