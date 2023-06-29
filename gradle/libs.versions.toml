@@ -5,6 +5,7 @@ com-android-application = "8.2.0-alpha06"
 datastoreCore = "1.0.0"
 espresso-core = "3.5.1"
 appcompat = "1.6.1"
+gson = "2.10.1"
 material3 = "1.1.0"
 org-jetbrains-kotlin-android = "1.8.0"
 constraintlayout = "2.1.4"
@@ -69,6 +70,7 @@ androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version
 coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coilSvg" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 accompanist-adaptive = { module = "com.google.accompanist:accompanist-adaptive", version.ref = "accompanist" }

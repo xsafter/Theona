@@ -16,20 +16,24 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import org.xmtp.android.library.Client
 import org.xsafter.xmtpmessenger.GeoMessage
 import org.xsafter.xmtpmessenger.R
+import org.xsafter.xmtpmessenger.activities.chat.ConversationContent
 import org.xsafter.xmtpmessenger.activities.viewmodels.AddContactViewModel
 import org.xsafter.xmtpmessenger.activities.viewmodels.MainViewModel
 import org.xsafter.xmtpmessenger.activities.viewmodels.RegisterViewModel
 import org.xsafter.xmtpmessenger.data.ClientSingleton
 import org.xsafter.xmtpmessenger.data.me
+import org.xsafter.xmtpmessenger.ui.components.chat.ChatUIState
 import javax.inject.Inject
 
 val Context.credentialsDataStore: DataStore<Preferences> by preferencesDataStore(name = "credentials")
@@ -149,8 +153,26 @@ fun NavigationComponent(navController: NavHostController, navControllerMainScree
                 )
             )
         }
-        composable("chat") {
+        composable("chat/{userId}",
+            arguments = listOf(navArgument("userId") { type = NavType.StringType })
+        ) {
+            val userId = it.arguments?.getString("userId")
+            ConversationContent(
+                client,
+                userId = userId!!,
+                uiState = ChatUIState(
+                    userId.take(5),
+                    2,
+                    mutableListOf()
+                ),
+                navigateToProfile = { user ->
 
+                },
+                navController = navController,
+                onNavIconPressed = {
+                    navController.navigateUp()
+                }
+            )
         }
     }
 }
