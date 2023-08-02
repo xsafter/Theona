@@ -3,6 +3,7 @@ package org.xsafter.xmtpmessenger.data
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import androidx.annotation.Keep
 import org.xsafter.xmtpmessenger.data.EMOJIS.EMOJI_CLOUDS
 import org.xsafter.xmtpmessenger.data.EMOJIS.EMOJI_FLAMINGO
 import org.xsafter.xmtpmessenger.data.EMOJIS.EMOJI_MELTING
@@ -12,6 +13,7 @@ import org.xsafter.xmtpmessenger.ui.components.chat.ChatUIState
 import org.xsafter.xmtpmessenger.ui.components.chat.Message
 import java.util.Date
 
+@Keep
 data class User (
     val id: String,
     var username: String,

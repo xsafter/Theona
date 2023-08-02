@@ -32,6 +32,7 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,10 +58,10 @@ fun Routing.Main.BottomNav.Chats.Content(
     users: List<User>,
     onChatClick: (user: User) -> Unit,
     onSearchClick: () -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
+    mainNavController: NavHostController
 ) {
 
-    val context = LocalContext.current
     LazyColumn {
         item {
             SearchButton(
@@ -73,6 +74,11 @@ fun Routing.Main.BottomNav.Chats.Content(
                     alpha = 0.5f
                 )
             )
+        }
+        if (users.isEmpty()) {
+            item {
+                HintItem()
+            }
         }
         itemsIndexed(users) { index, user ->
             Log.e("user",  user.username)
@@ -89,12 +95,13 @@ fun Routing.Main.BottomNav.Chats.Content(
         }
     }
 
+
     Box(modifier =
      Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomEnd) {
         FloatingActionButton(
             onClick = {
-                      navController.navigate("add_contact")
+                      mainNavController.navigate("add_contact")
             },
             modifier = Modifier
                 .padding(16.dp, 16.dp),
@@ -213,6 +220,43 @@ fun LastMessageWithDateTime(
         Text(" • $dateTime", maxLines = 1)
     }
 }
+
+@Composable
+fun HintItem() {
+    val interactionSource = MutableInteractionSource()
+
+    val scale = remember {
+        Animatable(1f)
+    }
+
+    val coroutineScope = rememberCoroutineScope()
+
+    Text(
+        text = "No chats are available. Add some people to contacts to chat with them",
+        color = Color.Gray,
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp)
+            .padding(horizontal = 4.dp)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
+                coroutineScope.launch {
+                    scale.animateTo(
+                        0.95f,
+                        animationSpec = tween(100),
+                    )
+                    scale.animateTo(
+                        1f,
+                        animationSpec = tween(100),
+                    )
+                }
+            }
+    )
+}
+
 
 private fun formatDateTime(date: Date): String {
     val currentTime = System.currentTimeMillis()

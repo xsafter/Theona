@@ -8,38 +8,45 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import org.xmtp.android.library.Client
 import org.xsafter.xmtpmessenger.GeoMessage
 import org.xsafter.xmtpmessenger.R
-import org.xsafter.xmtpmessenger.activities.chat.ConversationContent
 import org.xsafter.xmtpmessenger.activities.viewmodels.AddContactViewModel
 import org.xsafter.xmtpmessenger.activities.viewmodels.MainViewModel
 import org.xsafter.xmtpmessenger.activities.viewmodels.RegisterViewModel
+import org.xsafter.xmtpmessenger.activities.viewmodels.SplashViewModel
 import org.xsafter.xmtpmessenger.data.ClientSingleton
 import org.xsafter.xmtpmessenger.data.me
-import org.xsafter.xmtpmessenger.ui.components.chat.ChatUIState
+import org.xsafter.xmtpmessenger.ui.theme.JetchatTheme
 import javax.inject.Inject
 
 val Context.credentialsDataStore: DataStore<Preferences> by preferencesDataStore(name = "credentials")
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private val viewModel: SplashViewModel by viewModels()
+
     private lateinit var mainViewModel: MainViewModel
 
     private val PERMISSION_ID = 143
@@ -49,8 +56,12 @@ class MainActivity : AppCompatActivity() {
 
     @Inject lateinit var clientSingleton: ClientSingleton
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        splashScreen.setKeepOnScreenCondition{viewModel.isLoading.value}
 
         mainViewModel = MainViewModel(this)
         //if (clientSingleton.client == null)
@@ -77,14 +88,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupUI() {
         setContent {
-            val navController = rememberNavController()
-            val navControllerMainScreen = rememberNavController()
+            JetchatTheme {
+                val navController = rememberNavController()
+                val navControllerMainScreen = rememberNavController()
 
-            NavigationComponent(navController = navController,
-                navControllerMainScreen = navControllerMainScreen,
-                client = mainViewModel.client)
+                NavigationComponent(navController = navController,
+                    navControllerMainScreen = navControllerMainScreen,
+                    client = mainViewModel.client)
 
-            Log.e("My address", "${mainViewModel.client.address}, ${me.id}")
+                Log.e("My address", "${mainViewModel.client.address}, ${me.id}")
+            }
+
         }
     }
 
@@ -127,13 +141,20 @@ class MainActivity : AppCompatActivity() {
 
 @Composable
 fun NavigationComponent(navController: NavHostController, navControllerMainScreen: NavHostController,client: Client) {
+    val registerViewModel = RegisterViewModel(LocalContext.current.credentialsDataStore)
+    var startDestination by remember { mutableStateOf("register") }
+
+    LaunchedEffect(key1 = registerViewModel) {
+        startDestination = if(registerViewModel.isRegistered()) "main" else "register"
+    }
+
     NavHost(
         navController = navController,
-        startDestination = "register"
+        startDestination = startDestination
     ) {
         composable("register") {
             RegisterScreen(
-                viewModel = RegisterViewModel(LocalContext.current.credentialsDataStore),
+                viewModel = registerViewModel,
                 navController = navController
             )
         }
@@ -141,7 +162,9 @@ fun NavigationComponent(navController: NavHostController, navControllerMainScree
         composable("main") {
             Main(
                 client = client,
-                navController = navControllerMainScreen
+                LocalContext.current,
+                navController = navControllerMainScreen,
+                navController
             )
         }
 
@@ -150,28 +173,8 @@ fun NavigationComponent(navController: NavHostController, navControllerMainScree
                 AddContactViewModel(
                     context = LocalContext.current,
                     client = client
-                )
-            )
-        }
-        composable("chat/{userId}",
-            arguments = listOf(navArgument("userId") { type = NavType.StringType })
-        ) {
-            val userId = it.arguments?.getString("userId")
-            ConversationContent(
-                client,
-                userId = userId!!,
-                uiState = ChatUIState(
-                    userId.take(5),
-                    2,
-                    mutableListOf()
                 ),
-                navigateToProfile = { user ->
-
-                },
-                navController = navController,
-                onNavIconPressed = {
-                    navController.navigateUp()
-                }
+                navController = navController
             )
         }
     }

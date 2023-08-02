@@ -5,6 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.xmtp.android.library.Client
+import org.xsafter.xmtpmessenger.data.User
+import org.xsafter.xmtpmessenger.ui.components.createFromObject
+import java.util.Date
 
 class AddContactViewModel(val context: Context,  val client: Client) : ViewModel() {
     private val _username = MutableLiveData<String>("")
@@ -15,7 +18,15 @@ class AddContactViewModel(val context: Context,  val client: Client) : ViewModel
     }
 
     fun addUser() {
-        ChatViewModel(username.value!!, context, client).setupConversations()
-        MapViewModel(client).setupGeoConversations(mutableListOf(username.value!!))
+        UsersViewModel(client, context).addUser(
+            User(
+                username.value!!,
+                username.value!!,
+                createFromObject(username.value!!),
+                "",
+                "",
+                Date()
+            )
+        )
     }
 }

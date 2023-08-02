@@ -1,5 +1,6 @@
 package org.xsafter.xmtpmessenger.activities
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,11 +18,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import es.dmoral.toasty.Toasty
+import org.xmtp.android.library.XMTPException
 import org.xsafter.xmtpmessenger.activities.viewmodels.AddContactViewModel
 
 @Composable
-fun AddContactScreen(viewModel: AddContactViewModel) {
+fun AddContactScreen(viewModel: AddContactViewModel, navController: NavHostController) {
     val username by viewModel.username.observeAsState("")
 
     Column(
@@ -33,7 +38,9 @@ fun AddContactScreen(viewModel: AddContactViewModel) {
         Icon(
             imageVector = Icons.Default.PersonAdd,
             contentDescription = "Add Contact Icon",
-            modifier = Modifier.size(48.dp).padding(top = 32.dp)
+            modifier = Modifier
+                .size(48.dp)
+                .padding(top = 32.dp)
         )
 
         Text(
@@ -51,11 +58,17 @@ fun AddContactScreen(viewModel: AddContactViewModel) {
                 .fillMaxWidth()
         )
 
+        val ctx = LocalContext.current
         // Add the OK button
         Button(
             onClick = {
-                      viewModel.addUser()
+                try {
+                    viewModel.addUser()
+                } catch (e: XMTPException) {
+                    Toasty.error(ctx, "Can't add user: not found", Toast.LENGTH_SHORT, true).show()
+                }
 
+                navController.popBackStack()
             },
             modifier = Modifier.padding(top = 16.dp)
         ) {
