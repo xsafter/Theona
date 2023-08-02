@@ -1,0 +1,7 @@
+Unused dependencies which should be removed:
+  implementation("androidx.compose.ui:ui-util:1.4.3")
+  implementation("androidx.compose.ui:ui-viewbinding:1.4.3")
+  implementation("androidx.core:core-ktx:1.10.1")
+  implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+  implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
+  implementation("androidx.navigation:navigation-ui-ktx:2.6.0")

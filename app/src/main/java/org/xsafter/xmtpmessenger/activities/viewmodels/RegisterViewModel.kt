@@ -1,5 +1,6 @@
 package org.xsafter.xmtpmessenger.activities.viewmodels
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -7,6 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.security.SecureRandom
 import java.security.spec.KeySpec
@@ -28,7 +30,7 @@ class RegisterViewModel (
 ) : ViewModel() {
     // Save username and hashed password to DataStore
     fun saveCredentials(username: String, password: String) {
-        viewModelScope.launch{
+        viewModelScope.launch {
             val hashedPassword = hashPassword(password)
 
             dataStore.edit { preferences ->
@@ -36,6 +38,17 @@ class RegisterViewModel (
                 preferences[hashedPasswordKey] = hashedPassword
             }
         }
+    }
+
+    suspend fun readKeys(): String? {
+        val dataStore = dataStore
+        val keys = dataStore.data.map { preferences ->
+            preferences[usernameKey]
+        }.first()
+
+        Log.d("KEYS", keys.toString())
+
+        return keys
     }
 
     private fun hashPassword(password: String): String {
@@ -73,5 +86,11 @@ class RegisterViewModel (
         }
         return isLoggedIn
     }
+
+    // check if at least one user is registered
+    suspend fun isRegistered(): Boolean {
+        return readKeys() != null || readKeys() != ""
+    }
+
 
 }

@@ -53,7 +53,7 @@ class MapViewModel(val client: Client) : ViewModel() {
     private lateinit var _geoMessages: MutableStateFlow<MutableList<GeoMessageWrapper>>
 
     val geoMessages: StateFlow<List<GeoMessageWrapper>>
-        get() = _geoMessages
+        get() = if (this::_geoMessages.isInitialized) _geoMessages else MutableStateFlow(emptyList())
 
     fun setupGeoConversations(userIds: MutableList<String>) {
         _geoMessages = createGeoMessages(userIds)

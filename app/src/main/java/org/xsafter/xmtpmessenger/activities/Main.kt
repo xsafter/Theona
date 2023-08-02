@@ -1,5 +1,6 @@
 package org.xsafter.xmtpmessenger.activities
 
+import android.content.Context
 import android.graphics.drawable.BitmapDrawable
 import android.util.Log
 import androidx.compose.foundation.layout.Box
@@ -14,21 +15,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.xmtp.android.library.Client
 import org.xsafter.xmtpmessenger.ClientManager
+import org.xsafter.xmtpmessenger.activities.chat.ConversationContent
 import org.xsafter.xmtpmessenger.activities.viewmodels.MapViewModel
 import org.xsafter.xmtpmessenger.activities.viewmodels.UsersViewModel
-import org.xsafter.xmtpmessenger.data.GeoMessageWrapper
 import org.xsafter.xmtpmessenger.data.User
 import org.xsafter.xmtpmessenger.ui.BottomBar
 import org.xsafter.xmtpmessenger.ui.Routing
 import org.xsafter.xmtpmessenger.ui.components.Content
+import org.xsafter.xmtpmessenger.ui.components.chat.ChatUIState
 
 
 @Composable
@@ -38,7 +42,8 @@ fun Routing.Main.Content(
     mapViewModel: MapViewModel = MapViewModel(client),
     onChatClick: (user: User) -> Unit,
     onSearchClick: () -> Unit,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    mainNavController: NavHostController
 ) {
     val bottomNavController = rememberNavController()
     val navBackStackEntry by bottomNavController.currentBackStackEntryAsState()
@@ -51,11 +56,9 @@ fun Routing.Main.Content(
 
     Log.e("users_list", users.joinToString())
 
-    if (users.isNotEmpty())
-        mapViewModel.setupGeoConversations(users.map{ it.username }.toMutableList())
 
-    val geoMessages: List<GeoMessageWrapper> by mapViewModel.geoMessages.collectAsState()
-
+    mapViewModel.setupGeoConversations(users.map{ it.username }.toMutableList())
+    val geoMessages by mapViewModel.geoMessages.collectAsState()
 
     Box {
         Scaffold(
@@ -95,20 +98,20 @@ fun Routing.Main.Content(
                             users,
                             onChatClick,
                             onSearchClick,
-                            navController
+                            navController,
+                            mainNavController
                         )
                     }
 
                     composable(Routing.Main.BottomNav.Map.route) {
                         Routing.Main.BottomNav.Map.Content(
                             geoMessages = geoMessages.toMutableList(),
-                            //geoMessages = mutableListOf()
                             onLoad = {map ->
                                 for (geoMessage in geoMessages) {
                                     val geoPoint = GeoPoint(geoMessage.geoMessage.latitude, geoMessage.geoMessage.longitude)
                                     val marker = Marker(map)
-                                    marker.setPosition(geoPoint)
-                                    marker.setIcon(BitmapDrawable(context.resources, geoMessage.user.avatar))
+                                    marker.position = geoPoint
+                                    marker.icon = BitmapDrawable(context.resources, geoMessage.user.avatar)
                                     marker.setInfoWindow(null)
                                     marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                                     map.overlays.add(marker)
@@ -127,10 +130,12 @@ fun Routing.Main.Content(
 @Composable
 fun PreviewRoutingMainContent() {
     val client = ClientManager.client
+    val context = LocalContext.current
 
-    val usersViewModel = UsersViewModel(client)
+    val usersViewModel = UsersViewModel(client, context)
     val mapViewModel = MapViewModel(client)
     val navController = rememberNavController()
+    val mainNavController = rememberNavController()
 
     Routing.Main.Content(
         ClientManager.client,
@@ -138,6 +143,8 @@ fun PreviewRoutingMainContent() {
         mapViewModel,
         onChatClick = { },
         onSearchClick = { },
+        navController = navController,
+        mainNavController = mainNavController
         )
 
 }
@@ -145,9 +152,11 @@ fun PreviewRoutingMainContent() {
 @Composable
 fun Main(
     client: Client,
-    navController: NavHostController
+    context: Context,
+    navController: NavHostController,
+    mainNavController: NavHostController
 ) {
-    val usersViewModel = UsersViewModel(client)
+    val usersViewModel = UsersViewModel(client, context)
     val mapViewModel = MapViewModel(client)
     NavHost(navController = navController, startDestination = Routing.Main.route) {
         composable(Routing.Main.route) {
@@ -157,7 +166,29 @@ fun Main(
                 mapViewModel,
                 onChatClick = { },
                 onSearchClick = { },
-                navController
+                navController,
+                mainNavController
+            )
+        }
+        composable("chat/{userId}",
+            arguments = listOf(navArgument("userId") { type = NavType.StringType })
+        ) {
+            val userId = it.arguments?.getString("userId")
+            ConversationContent(
+                client,
+                userId = userId!!,
+                uiState = ChatUIState(
+                    userId.take(5),
+                    2,
+                    mutableListOf()
+                ),
+                navigateToProfile = { user ->
+
+                },
+                navController = navController,
+                onNavIconPressed = {
+                    navController.navigateUp()
+                }
             )
         }
     }

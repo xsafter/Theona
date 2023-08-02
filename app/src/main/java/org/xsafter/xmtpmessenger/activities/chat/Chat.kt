@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,9 +43,9 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -98,7 +99,9 @@ fun ConversationContent(
         viewModel.setupConversations()
     }
 
-    val messagesState by viewModel.messages.observeAsState(emptyList())
+    val messagesState by viewModel.messages.collectAsState()
+
+    uiState.messages = messagesState
 
     LaunchedEffect(key1 = Unit) {
         viewModel.fetchMessages()
@@ -234,32 +237,29 @@ fun Messages(
                 .testTag(ConversationTestTag)
                 .fillMaxSize()
         ) {
-            for (index in messages.indices) {
+            items(messages) { content ->
+                val index = messages.indexOf(content)
                 val prevAuthor = messages.getOrNull(index - 1)?.author
                 val nextAuthor = messages.getOrNull(index + 1)?.author
-                val content = messages[index]
                 val isFirstMessageByAuthor = prevAuthor != content.author
                 val isLastMessageByAuthor = nextAuthor != content.author
                 val messageDate = messages.getOrNull(index)?.timestamp
                 val prevMessageDate = messages.getOrNull(index - 1)?.timestamp
                 val nextMessageDate = messages.getOrNull(index + 1)?.timestamp
                 if (nextMessageDate == null && messageDate != null) {
-                    item {
-                        DayHeader(fancyDateString(messageDate))
-                    }
+                    DayHeader(fancyDateString(messageDate))
                 }
 
-                item {
-                    Message(
-                        onAuthorClick = { name -> navigateToProfile(name) },
-                        msg = content,
-                        isUserMe = content.author == authorMe,
-                        isFirstMessageByAuthor = isFirstMessageByAuthor,
-                        isLastMessageByAuthor = isLastMessageByAuthor
-                    )
-                }
+                Message(
+                    onAuthorClick = { name -> navigateToProfile(name) },
+                    msg = content,
+                    isUserMe = content.author == authorMe,
+                    isFirstMessageByAuthor = isFirstMessageByAuthor,
+                    isLastMessageByAuthor = isLastMessageByAuthor
+                )
             }
         }
+
         // Jump to bottom button shows up when user scrolls past a threshold.
         // Convert to pixels:
         val jumpThreshold = with(LocalDensity.current) {
