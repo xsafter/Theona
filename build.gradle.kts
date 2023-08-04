@@ -7,4 +7,6 @@ plugins {
 
     id("com.autonomousapps.dependency-analysis") version "1.20.0" // Dependency Lint: ./gradlew buildHealth
 
+    id("com.google.devtools.ksp") version "1.8.10-1.0.9" apply false
+
 }
