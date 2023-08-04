@@ -10,7 +10,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.MapView
-import org.xsafter.xmtpmessenger.data.GeoMessageWrapper
+import org.xsafter.xmtpmessenger.data.model.GeoMessageWrapper
 
 @Composable
 fun rememberMapViewWithLifecycle(geoMessages: MutableList<GeoMessageWrapper>): MapView {

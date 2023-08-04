@@ -10,9 +10,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.osmdroid.views.MapView
-import org.xsafter.xmtpmessenger.data.GeoMessageWrapper
+import org.xsafter.xmtpmessenger.data.model.GeoMessageWrapper
 import org.xsafter.xmtpmessenger.rememberMapViewWithLifecycle
-import org.xsafter.xmtpmessenger.ui.Routing
+import org.xsafter.xmtpmessenger.ui.navigation.Routing
 
 @Composable
 fun Routing.Main.BottomNav.Map.Content(
