@@ -4,7 +4,7 @@ plugins {
 
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -53,7 +53,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
+        kotlinCompilerExtensionVersion = "1.4.8"
     }
 
     kotlinOptions {
@@ -72,7 +72,7 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.ui.graphics)
     implementation(platform(libs.androidx.compose.bom))
-    testImplementation("org.testng:testng:6.9.6")
+    testImplementation("org.testng:testng:7.8.0")
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(platform(libs.androidx.compose.bom))
     val composeBom = platform(libs.androidx.compose.bom)
@@ -111,7 +111,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.core.splashscreen)
 
-    implementation("org.xmtp:android:0.0.9")
+    implementation("org.xmtp:android:0.3.5")
 
     implementation(libs.androidx.datastore.preferences)
     implementation (libs.play.services.location)
@@ -131,12 +131,13 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
 
-
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.paging.compose)
+    implementation(libs.androidx.room.paging)
+    implementation(libs.androidx.room.ktx)
 }
 
 kapt {

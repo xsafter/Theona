@@ -6,10 +6,13 @@ import org.xsafter.xmtpmessenger.data.datastore.database.dao.UserDao
 import org.xsafter.xmtpmessenger.data.model.User
 import org.xsafter.xmtpmessenger.ui.components.createFromObject
 import java.util.Date
+import javax.inject.Inject
 
-class UserRepository(private val userDao: UserDao, private val client: Client) {
+class UserRepository @Inject constructor(private val userDao: UserDao, private val client: Client) {
     // Local query to get users
     fun getLocalUsers(): PagingSource<Int, User> = userDao.getAllUsers()
+
+    fun getLocalUsersAsList(): List<User> = userDao.getAllUsersList()
 
     // Remote query to get users
     suspend fun getAndSaveRemoteUsers() {
@@ -33,4 +36,6 @@ class UserRepository(private val userDao: UserDao, private val client: Client) {
         userDao.clearUsers()
         getAndSaveRemoteUsers()
     }
+
+    suspend fun insertUser(user: User) = userDao.insertUser(user)
 }

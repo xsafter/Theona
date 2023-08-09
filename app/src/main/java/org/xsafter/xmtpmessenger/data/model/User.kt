@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import androidx.annotation.Keep
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import org.xsafter.xmtpmessenger.data.model.EMOJIS.EMOJI_CLOUDS
@@ -20,7 +21,7 @@ import java.util.Date
 data class User (
     @PrimaryKey val id: String,
     var username: String,
-    var avatar: Bitmap,
+    @ColumnInfo(name = "avatar") var avatar: Bitmap?,
     val lastMessage: String,
     var lastMessageUser: String,
     val lastMessageTime: Date

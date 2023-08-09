@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -39,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import org.xmtp.android.library.Client
@@ -55,7 +56,7 @@ import java.util.Date
 @Composable
 fun Routing.Main.BottomNav.Chats.Content(
     client: Client,
-    users: List<User>,
+    users: LazyPagingItems<User>,
     onChatClick: (user: User) -> Unit,
     onSearchClick: () -> Unit,
     navController: NavHostController,
@@ -75,12 +76,16 @@ fun Routing.Main.BottomNav.Chats.Content(
                 )
             )
         }
-        if (users.isEmpty()) {
+        if (users.itemCount == 0) {
             item {
                 HintItem()
             }
         }
-        itemsIndexed(users) { index, user ->
+        items(
+            users.itemCount,
+            key = users.itemKey { it.username }
+        ) { index ->
+            val user = users[index]!!
             Log.e("user",  user.username)
             ChatItem(
                 user = user,
@@ -163,13 +168,13 @@ fun ChatItem(
                 when {
                     isOnline -> {
                         CircleBadgeAvatar(
-                            imageData = user.avatar,
+                            imageData = user.avatar!!,
                             size = 56.dp
                         )
                     }
 
                     else -> CircleBorderAvatar(
-                        imageData = user.avatar,
+                        imageData = user.avatar!!,
                         size = 56.dp,
                     )
                 }

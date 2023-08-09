@@ -3,7 +3,10 @@ package org.xsafter.xmtpmessenger.viewmodels
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import org.xsafter.xmtpmessenger.data.datastore.database.repository.UserRepository
 import org.xsafter.xmtpmessenger.data.model.User
 import org.xsafter.xmtpmessenger.ui.components.createFromObject
 import java.util.Date
@@ -11,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddContactViewModel @Inject constructor(
-    private val sharedViewModel: SharedViewModel,
+    private val userRepository: UserRepository,
     application: Application
 ) : BaseViewModel(application) {
 
@@ -32,6 +35,8 @@ class AddContactViewModel @Inject constructor(
                 "",
                 Date()
             )
-        sharedViewModel.addUser(user)
+        viewModelScope.launch {
+            userRepository.insertUser(user)
+        }
     }
 }

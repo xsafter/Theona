@@ -22,19 +22,21 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.xmtp.android.library.Client
-import org.xsafter.xmtpmessenger.utils.ClientManager
-import org.xsafter.xmtpmessenger.ui.screens.chat.ConversationContent
-import org.xsafter.xmtpmessenger.viewmodels.MapViewModel
-import org.xsafter.xmtpmessenger.viewmodels.SharedViewModel
-import org.xsafter.xmtpmessenger.viewmodels.UsersViewModel
 import org.xsafter.xmtpmessenger.data.model.User
 import org.xsafter.xmtpmessenger.ui.components.Content
 import org.xsafter.xmtpmessenger.ui.components.chat.ChatUIState
 import org.xsafter.xmtpmessenger.ui.navigation.BottomBar
 import org.xsafter.xmtpmessenger.ui.navigation.Routing
+import org.xsafter.xmtpmessenger.ui.screens.chat.ConversationContent
+import org.xsafter.xmtpmessenger.utils.ClientManager
+import org.xsafter.xmtpmessenger.viewmodels.MapViewModel
+import org.xsafter.xmtpmessenger.viewmodels.SharedViewModel
+import org.xsafter.xmtpmessenger.viewmodels.UsersViewModel
 
 
 @Composable
@@ -54,12 +56,15 @@ fun Routing.Main.Content(
         return bottomNavRoutings.find { it.route == currentRoute }
     }
 
-    val users: List<User> by usersViewModel.users.collectAsState()
+    val users: LazyPagingItems<User> = usersViewModel.users.collectAsLazyPagingItems()
 
-    Log.e("users_list", users.joinToString())
+    Log.e("users_list", users.toString())
 
 
-    mapViewModel.setupGeoConversations(users.map{ it.username }.toMutableList())
+    val usersList = usersViewModel.usersList
+    val usernames = usersList.map { it.username }.toMutableList()
+    mapViewModel.setupGeoConversations(usernames)
+
     val geoMessages by mapViewModel.geoMessages.collectAsState()
 
     Box {

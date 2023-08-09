@@ -66,7 +66,6 @@ import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.xmtp.android.library.Client
-import org.xsafter.xmtpmessenger.viewmodels.ChatViewModel
 import org.xsafter.xmtpmessenger.data.model.me
 import org.xsafter.xmtpmessenger.ui.components.AppBar
 import org.xsafter.xmtpmessenger.ui.components.chat.ChatUIState
@@ -76,6 +75,7 @@ import org.xsafter.xmtpmessenger.ui.components.chat.SymbolAnnotationType
 import org.xsafter.xmtpmessenger.ui.components.chat.UserInput
 import org.xsafter.xmtpmessenger.ui.components.chat.messageFormatter
 import org.xsafter.xmtpmessenger.ui.theme.JetchatTheme
+import org.xsafter.xmtpmessenger.viewmodels.ChatViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -143,7 +143,7 @@ fun ConversationContent(
             UserInput(
                 onMessageSent = { content ->
                     uiState.addMessage(
-                        Message(authorMe, content, timeNow, me.avatar, me.avatar)
+                        Message(authorMe, content, timeNow, me.avatar, me.avatar!!)
                     )
 
                     viewModel.sendMessage(content)

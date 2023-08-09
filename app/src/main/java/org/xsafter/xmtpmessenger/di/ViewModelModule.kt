@@ -6,8 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import org.xmtp.android.library.Client
+import org.xsafter.xmtpmessenger.data.datastore.database.repository.UserRepository
 import org.xsafter.xmtpmessenger.viewmodels.MapViewModel
-import org.xsafter.xmtpmessenger.viewmodels.SharedViewModel
 import org.xsafter.xmtpmessenger.viewmodels.UsersViewModel
 
 @Module
@@ -15,10 +15,10 @@ import org.xsafter.xmtpmessenger.viewmodels.UsersViewModel
 object ViewModelModule {
     @Provides
     fun provideUsersViewModel(
-        sharedViewModel: SharedViewModel,
+        userRepository: UserRepository,
         application: Application
     ): UsersViewModel {
-        return UsersViewModel(sharedViewModel, application)
+        return UsersViewModel(userRepository, application)
     }
 
     @Provides
