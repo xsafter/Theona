@@ -2,7 +2,9 @@ package org.xsafter.xmtpmessenger.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import org.xmtp.android.library.Client
 import org.xsafter.xmtpmessenger.data.datastore.database.repository.UserRepository
 import org.xsafter.xmtpmessenger.data.model.User
@@ -17,6 +19,8 @@ class SharedViewModel @Inject constructor(
     lateinit var client: Client
 
     fun addUser(user: User) {
-        userRepository.insertUser(user)
+        viewModelScope.launch {
+            userRepository.insertUser(user)
+        }
     }
 }
