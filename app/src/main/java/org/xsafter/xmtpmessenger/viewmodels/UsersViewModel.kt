@@ -1,6 +1,8 @@
 package org.xsafter.xmtpmessenger.viewmodels
 
 import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -21,7 +23,10 @@ class UsersViewModel @Inject constructor(
         userRepository.getLocalUsers()
     }.flow.cachedIn(viewModelScope)
 
-    val usersList = userRepository.getLocalUsersAsList()
+    val usersList: LiveData<List<User>> = liveData {
+        emit(userRepository.getLocalUsersAsList())
+    }
+
 
     fun refreshUsers() {
         viewModelScope.launch {
