@@ -3,18 +3,22 @@ package org.xsafter.xmtpmessenger.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.xmtp.android.library.Client
 import org.xmtp.android.library.Conversation
-import org.xsafter.xmtpmessenger.utils.ConversationHelper
 import org.xsafter.xmtpmessenger.data.model.GeoMessage
 import org.xsafter.xmtpmessenger.data.model.GeoMessageWrapper
 import org.xsafter.xmtpmessenger.data.model.User
 import org.xsafter.xmtpmessenger.ui.components.createFromObject
+import org.xsafter.xmtpmessenger.utils.ConversationHelper
+import javax.inject.Inject
 
-class MapViewModel(val client: Client) : ViewModel() {
+class MapViewModel @Inject constructor(val client: Client) : ViewModel() {
+
 
     private lateinit var geoConversations: MutableList<Conversation>
 

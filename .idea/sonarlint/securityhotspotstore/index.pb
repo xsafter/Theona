@@ -1800,8 +1800,6 @@ Q.idea/sonarlint/securityhotspotstore/9/9/992b13676ee117c450ec82e7b2060b755d82b2
 Q.idea/sonarlint/securityhotspotstore/9/9/99070a6ddeb46ee833f257019f9c5ea8929146a6,b/d/bdcda494aa4666f769edc1d5158a419ffbb07113
 w
 G.idea/sonarlint/issuestore/1/3/13044a085614bb0db4c62fcafa53bbf222904b00,1/3/13cfb550dcfaabf53ead189eda490f904395f6d5
-
-Q.idea/sonarlint/securityhotspotstore/9/9/99b4e743ab2c5f24f588e7c9ca99c69528689ec9,d/3/d3b91c4676eb39add08544869dbe9c9738275f0e
 w
 G.idea/sonarlint/issuestore/1/3/13f5d07633a292d86b570394e39b3555d1039c54,7/e/7ed8e163b943f23d56a2ec5d07981e12f7bae874
 
@@ -1922,8 +1920,6 @@ w
 G.idea/sonarlint/issuestore/9/9/992b13676ee117c450ec82e7b2060b755d82b225,6/8/68126dcc0caa4fb55097af4079568df21a86a98e
 w
 G.idea/sonarlint/issuestore/9/9/99070a6ddeb46ee833f257019f9c5ea8929146a6,4/d/4d83efafbe082a28e06e4aed028fe9f133c350ef
-w
-G.idea/sonarlint/issuestore/9/9/99b4e743ab2c5f24f588e7c9ca99c69528689ec9,4/2/424674a829e661ca505f70a5fbada1e95cb86a92
 w
 G.idea/sonarlint/issuestore/9/9/99ffbf7e23903afb31b2fc14857a58be757efc33,6/6/66243b55a5da902d2fdf2ba106cff9f5e1a3bbb4
 
@@ -2600,8 +2596,6 @@ Q.idea/sonarlint/securityhotspotstore/c/0/c027f4a286a2660eab3c4f9626929aa816ac38
 Q.idea/sonarlint/securityhotspotstore/c/0/c069474c97ca12d14fa49002d55b180249933bfb,8/6/867cae53cff7a55a50840f6a14072e3f00624956
 
 Q.idea/sonarlint/securityhotspotstore/c/0/c0e114a9083d99fd7077b272bf6a11cd2dc16fe0,6/0/60dff01e01ad0e99e7702150354951a1064a6e06
-
-Q.idea/sonarlint/securityhotspotstore/c/0/c0a1f4d546574cd0e8085272ac48abbb978fae5e,9/f/9fd686d8297b5cba2d5f4a310d5828f4670fb800
 
 Q.idea/sonarlint/securityhotspotstore/c/0/c0e67f3188ef717648b3a7145f277819f57423b1,0/6/064885ad2182da32d7cb8e42d55918b00fffc3ae
 w
@@ -3364,8 +3358,6 @@ G.idea/sonarlint/issuestore/c/0/c0e114a9083d99fd7077b272bf6a11cd2dc16fe0,8/3/83
 Q.idea/sonarlint/securityhotspotstore/4/f/4ff1b486d2f8ebc1f44bb3babbebf5495f4d0b1c,d/1/d1b8211d2d0257642a5fe6ecea38998850bd2114
 w
 G.idea/sonarlint/issuestore/4/6/4619a280eea6596bcf11e4e01d53a90851861b8c,4/a/4ad139a4a641c4ab18634815396915995f586a7a
-w
-G.idea/sonarlint/issuestore/c/0/c0a1f4d546574cd0e8085272ac48abbb978fae5e,c/7/c711f7e269a441ccce07ba1b811f2244dbaf7f23
 
 Q.idea/sonarlint/securityhotspotstore/4/f/4f4b1b452890496cdf9a15c6e6ef8a1135bc53a7,c/6/c6ecfbde173e08ad4085103801768832ed3f7da5
 w
@@ -4886,24 +4878,12 @@ x
 Happ/src/main/java/org/xsafter/xmtpmessenger/ui/screens/add/AddContact.kt,c/a/ca65c414f8f91d77662ef0f68598b9ef834d7723
 P
  app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
-y
-Iapp/src/main/java/org/xsafter/xmtpmessenger/viewmodels/SplashViewModel.kt,6/7/67acff30820f69c949ee8d246f84817662da2190
-{
-Kapp/src/main/java/org/xsafter/xmtpmessenger/viewmodels/RegisterViewModel.kt,6/1/618c070e88e9140656cfeb188890502063814861
-w
-Gapp/src/main/java/org/xsafter/xmtpmessenger/viewmodels/ChatViewModel.kt,d/2/d2b3ba2654e837898cab7b3c08d416e7cde51b7c
-r
-Bapp/src/main/java/org/xsafter/xmtpmessenger/utils/ClientManager.kt,e/d/ed7c3fbe2256fb6c1f077e3db4cb2edd24f357af
 n
 >app/src/main/java/org/xsafter/xmtpmessenger/ui/theme/Colors.kt,2/b/2b3620981e1b231d6ec2080591713b8348e0f017
-w
-Gapp/src/main/java/org/xsafter/xmtpmessenger/utils/ConversationHelper.kt,8/5/85ed10dc4cbfcd0e929df2cfe25d550fbff36225
 p
 @app/src/main/java/org/xsafter/xmtpmessenger/ui/components/Map.kt,8/4/840682a89a05084982bd85fa178a54d7c5728fbf
 k
 ;app/src/main/java/org/xsafter/xmtpmessenger/MapLifecycle.kt,a/a/aa85129726104740118d3a114be611dc220aab68
-x
-Happ/src/main/java/org/xsafter/xmtpmessenger/utils/ConversationsHelper.kt,5/3/53446c26563db4f839a5a73aaee0540bce8cc725
 q
 Aapp/src/main/java/org/xsafter/xmtpmessenger/utils/JetpackUtils.kt,8/9/896321502ee828854fed647ba714cae5d8cf512c
 n
@@ -4912,5 +4892,3 @@ v
 Fapp/src/main/java/org/xsafter/xmtpmessenger/ui/navigation/BottomNav.kt,2/6/269efcac01904d2c147ae799befcf061b0f64035
 t
 Dapp/src/main/java/org/xsafter/xmtpmessenger/ui/navigation/Routing.kt,0/d/0d981f09bcb4fb21c10e5e5ceac438ff149e0587
-w
-Gapp/src/main/java/org/xsafter/xmtpmessenger/viewmodels/BaseViewModel.kt,9/4/941d33b9e6d2543e2b7aedab24c305feb2705765

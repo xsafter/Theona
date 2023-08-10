@@ -1,6 +1,8 @@
 package org.xsafter.xmtpmessenger.data.datastore.database.repository
 
 import androidx.paging.PagingSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.xmtp.android.library.Client
 import org.xsafter.xmtpmessenger.data.datastore.database.dao.UserDao
 import org.xsafter.xmtpmessenger.data.model.User
@@ -12,7 +14,10 @@ class UserRepository @Inject constructor(private val userDao: UserDao, private v
     // Local query to get users
     fun getLocalUsers(): PagingSource<Int, User> = userDao.getAllUsers()
 
-    fun getLocalUsersAsList(): List<User> = userDao.getAllUsersList()
+    suspend fun getLocalUsersAsList(): List<User> = withContext(Dispatchers.IO) {
+        userDao.getAllUsersList()
+    }
+
 
     // Remote query to get users
     suspend fun getAndSaveRemoteUsers() {

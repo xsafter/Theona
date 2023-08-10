@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,7 +36,6 @@ import org.xsafter.xmtpmessenger.ui.navigation.Routing
 import org.xsafter.xmtpmessenger.ui.screens.chat.ConversationContent
 import org.xsafter.xmtpmessenger.utils.ClientManager
 import org.xsafter.xmtpmessenger.viewmodels.MapViewModel
-import org.xsafter.xmtpmessenger.viewmodels.SharedViewModel
 import org.xsafter.xmtpmessenger.viewmodels.UsersViewModel
 
 
@@ -61,7 +61,7 @@ fun Routing.Main.Content(
     Log.e("users_list", users.toString())
 
 
-    val usersList = usersViewModel.usersList
+    val usersList by usersViewModel.usersList.observeAsState(initial = listOf())
     val usernames = usersList.map { it.username }.toMutableList()
     mapViewModel.setupGeoConversations(usernames)
 
@@ -137,7 +137,6 @@ fun Routing.Main.Content(
 @Composable
 fun PreviewRoutingMainContent() {
     val client = ClientManager.client
-    val sharedViewModel: SharedViewModel = hiltViewModel()
     val context = LocalContext.current
 
     val usersViewModel: UsersViewModel = hiltViewModel()
@@ -166,7 +165,7 @@ fun Main(
 ) {
 
     val usersViewModel: UsersViewModel = hiltViewModel()
-    val mapViewModel: MapViewModel = hiltViewModel()
+    val mapViewModel: MapViewModel = hiltViewModel<MapViewModel>().create(client)
 
 
     NavHost(navController = navController, startDestination = Routing.Main.route) {

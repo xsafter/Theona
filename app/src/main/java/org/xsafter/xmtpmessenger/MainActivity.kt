@@ -37,11 +37,9 @@ import org.xsafter.xmtpmessenger.ui.screens.add.AddContactScreen
 import org.xsafter.xmtpmessenger.ui.screens.main.Main
 import org.xsafter.xmtpmessenger.ui.screens.register.RegisterScreen
 import org.xsafter.xmtpmessenger.ui.theme.JetchatTheme
-import org.xsafter.xmtpmessenger.viewmodels.MainViewModel
 import org.xsafter.xmtpmessenger.viewmodels.RegisterViewModel
-import org.xsafter.xmtpmessenger.viewmodels.SharedViewModel
 import org.xsafter.xmtpmessenger.viewmodels.SplashViewModel
-import org.xsafter.xmtpmessenger.viewmodels.UsersViewModel
+import javax.inject.Inject
 
 val Context.credentialsDataStore: DataStore<Preferences> by preferencesDataStore(name = "credentials")
 
@@ -49,9 +47,8 @@ val Context.credentialsDataStore: DataStore<Preferences> by preferencesDataStore
 class MainActivity : AppCompatActivity() {
     private val viewModel: SplashViewModel by viewModels()
 
-    private val mainViewModel: MainViewModel by viewModels()
-    private val usersViewModel: UsersViewModel by viewModels()
-    private val sharedViewModel: SharedViewModel by viewModels()
+    @Inject
+    lateinit var client: Client
 
     private val PERMISSION_ID = 143
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -67,8 +64,6 @@ class MainActivity : AppCompatActivity() {
         splashScreen.setKeepOnScreenCondition{viewModel.isLoading.value}
 
 
-        //if (clientSingleton.client == null)
-            mainViewModel.initializeClient()
         setupLocationServices()
         setupUI()
     }
@@ -95,9 +90,9 @@ class MainActivity : AppCompatActivity() {
 
                 NavigationComponent(navController = navController,
                     navControllerMainScreen = navControllerMainScreen,
-                    client = sharedViewModel.client)
+                    client = client)
 
-                Log.e("My address", "${sharedViewModel.client.address}, ${me.id}")
+                Log.e("My address", "${client.address}, ${me.id}")
             }
 
         }
