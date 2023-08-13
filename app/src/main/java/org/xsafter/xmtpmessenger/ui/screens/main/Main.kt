@@ -165,7 +165,7 @@ fun Main(
 ) {
 
     val usersViewModel: UsersViewModel = hiltViewModel()
-    val mapViewModel: MapViewModel = hiltViewModel<MapViewModel>().create(client)
+    val mapViewModel: MapViewModel = hiltViewModel()
 
 
     NavHost(navController = navController, startDestination = Routing.Main.route) {
@@ -185,7 +185,6 @@ fun Main(
         ) {
             val userId = it.arguments?.getString("userId")
             ConversationContent(
-                client,
                 userId = userId!!,
                 uiState = ChatUIState(
                     userId.take(5),

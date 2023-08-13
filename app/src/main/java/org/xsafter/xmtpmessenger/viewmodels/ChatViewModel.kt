@@ -1,47 +1,64 @@
 package org.xsafter.xmtpmessenger.viewmodels
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.xmtp.android.library.Client
 import org.xmtp.android.library.Conversation
-import org.xsafter.xmtpmessenger.utils.ConversationHelper
+import org.xsafter.xmtpmessenger.data.datastore.ConversationRepository
 import org.xsafter.xmtpmessenger.ui.components.chat.Message
 import org.xsafter.xmtpmessenger.ui.components.createFromObject
 
-class ChatViewModel(
-    private val userId: String,
-    private val context: Context,
-    val client: Client
+@HiltViewModel
+class ChatViewModel @AssistedInject constructor(
+    @Assisted private val userId: String,
+    private val conversationRepository: ConversationRepository
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(userId: String): ChatViewModel
+    }
+    companion object {
+        fun provideFactory(
+            assistedFactory: Factory,
+            userId: String,
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return assistedFactory.create(userId = userId) as T
+            }
+        }
+    }
 
     private val _messages = MutableStateFlow<List<Message>>(emptyList())
     val messages: StateFlow<List<Message>> = _messages
 
-    public lateinit var conversation: Conversation
+    private lateinit var conversation: Conversation
+
+    public val client: Client = conversationRepository.client
 
     init {
-        setupConversations()
+        setupConversation()
         fetchMessages()
     }
 
-    fun setupConversations() {
-        Log.e("userId", userId)
-
-        val convBuilder = ConversationHelper(client)
-        val conversations = convBuilder.createConversation(userId)
-
-        conversation = conversations[0]!!
+    private fun setupConversation() {
+        viewModelScope.launch {
+            conversation = conversationRepository.createMainConversation(userId)
+        }
     }
 
-    fun fetchMessages() {
+    private fun fetchMessages() {
         viewModelScope.launch {
-            conversation.streamMessages().collect { message ->
+            val messagesFlow = conversationRepository.getMessages(conversation)
+            messagesFlow.collect { message ->
                 _messages.value = _messages.value + Message(
                     message.senderAddress,
                     message.body,
@@ -52,9 +69,9 @@ class ChatViewModel(
         }
     }
 
-    fun sendMessage(message: String, image: Bitmap? = null) {
-        if (image != null)
-            conversation.send(image)
-        conversation.send(message)
+    fun sendMessage(message: String) {
+        if (conversation != null) {
+            conversation.send(message)
+        }
     }
 }

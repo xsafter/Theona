@@ -1,8 +1,6 @@
 
 Ç
 Rapp/src/main/java/org/xsafter/xmtpmessenger/ui/components/chat/MessageFormatter.kt,6/2/62228a2f074b37d5946e42ae1dbf9a3eb9abf1d8
-}
-Mapp/src/main/java/org/xsafter/xmtpmessenger/ui/components/chat/ChatUIState.kt,5/f/5f33c60b7331c7cace2b6df37cf6faf035a1bdc4
 >
 app/.gitignore,5/1/51e1c5d383dfaa35e0e7e5873a0a99355a86880f
 ]
@@ -4872,10 +4870,6 @@ v
 Fapp/src/main/java/org/xsafter/xmtpmessenger/ui/navigation/BottomNav.kt,2/6/269efcac01904d2c147ae799befcf061b0f64035
 n
 >app/src/main/java/org/xsafter/xmtpmessenger/ui/theme/Colors.kt,2/b/2b3620981e1b231d6ec2080591713b8348e0f017
-t
-Dapp/src/main/java/org/xsafter/xmtpmessenger/data/model/GeoMessage.kt,0/7/07bdfd72ee0c329c7e60510f87ce82670c254417
-{
-Kapp/src/main/java/org/xsafter/xmtpmessenger/data/model/GeoMessageWrapper.kt,0/1/0178545249ee34df6a2ce2d107d1a5b4a401cc6c
 p
 @app/src/main/java/org/xsafter/xmtpmessenger/data/GeoSingleton.kt,f/c/fcca8ee7ae21f2981adc55bda5896726b45cb625
 q
@@ -4892,3 +4886,25 @@ Dapp/src/main/java/org/xsafter/xmtpmessenger/ui/navigation/Routing.kt,0/d/0d981
 Napp/src/main/java/org/xsafter/xmtpmessenger/ui/components/chat/SearchButton.kt,6/b/6b33768d3d20433538c51cf8d71c6165ac5daa09
 n
 >app/src/main/java/org/xsafter/xmtpmessenger/ui/theme/Themes.kt,3/0/30bdf0a2dd6ee6326b6fa9c0874d78a41f83facb
+}
+Mapp/src/main/java/org/xsafter/xmtpmessenger/viewmodels/AddContactViewModel.kt,9/6/96d97c4912b41b6809e741f3a89bbdb42c16b8ad
+r
+Bapp/src/main/java/org/xsafter/xmtpmessenger/utils/ClientManager.kt,e/d/ed7c3fbe2256fb6c1f077e3db4cb2edd24f357af
+u
+Eapp/src/main/java/org/xsafter/xmtpmessenger/utils/DataStoreManager.kt,7/4/74935c66ee44a2952f6350256409d0fc7e16453a
+q
+Aapp/src/main/java/org/xsafter/xmtpmessenger/di/DataStoreModule.kt,e/0/e0e4d61f9684f1b4cab242eba3615fcccdd86857
+y
+Iapp/src/main/java/org/xsafter/xmtpmessenger/viewmodels/SplashViewModel.kt,6/7/67acff30820f69c949ee8d246f84817662da2190
+ê
+`app/src/main/java/org/xsafter/xmtpmessenger/data/datastore/database/repository/UserRepository.kt,3/a/3a102fec894e4184e7534ea8c9376868f8229caa
+}
+Mapp/src/main/java/org/xsafter/xmtpmessenger/ui/components/chat/ChatUIState.kt,5/f/5f33c60b7331c7cace2b6df37cf6faf035a1bdc4
+x
+Happ/src/main/java/org/xsafter/xmtpmessenger/viewmodels/UsersViewModel.kt,1/2/12d216b526b81b505831382405327ae48576816b
+x
+Happ/src/main/java/org/xsafter/xmtpmessenger/utils/ConversationsHelper.kt,5/3/53446c26563db4f839a5a73aaee0540bce8cc725
+{
+Kapp/src/main/java/org/xsafter/xmtpmessenger/data/model/GeoMessageWrapper.kt,0/1/0178545249ee34df6a2ce2d107d1a5b4a401cc6c
+t
+Dapp/src/main/java/org/xsafter/xmtpmessenger/data/model/GeoMessage.kt,0/7/07bdfd72ee0c329c7e60510f87ce82670c254417
