@@ -42,7 +42,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -54,18 +53,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LastBaseline
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import org.xmtp.android.library.Client
 import org.xsafter.xmtpmessenger.data.model.me
 import org.xsafter.xmtpmessenger.ui.components.AppBar
 import org.xsafter.xmtpmessenger.ui.components.chat.ChatUIState
@@ -83,10 +80,9 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ConversationContent(
-    client: Client,
     userId: String,
     navController: NavHostController,
-    viewModel: ChatViewModel = ChatViewModel(userId, LocalContext.current, client),
+    viewModel: ChatViewModel = hiltViewModel(),
     uiState: ChatUIState,
     navigateToProfile: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -95,17 +91,11 @@ fun ConversationContent(
     val authorMe = "me"
     val timeNow = System.currentTimeMillis()
 
-    runBlocking {
-        viewModel.setupConversations()
-    }
 
     val messagesState by viewModel.messages.collectAsState()
 
     uiState.messages = messagesState
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.fetchMessages()
-    }
 
     uiState.messages = messagesState
     val scrollState = rememberLazyListState()
