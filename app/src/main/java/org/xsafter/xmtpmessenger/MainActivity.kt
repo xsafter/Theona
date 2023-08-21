@@ -1,6 +1,7 @@
 package org.xsafter.xmtpmessenger
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -30,6 +31,8 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
+import es.dmoral.toasty.Toasty
+import org.xmtp.android.library.BuildConfig
 import org.xmtp.android.library.Client
 import org.xsafter.xmtpmessenger.data.model.GeoMessage
 import org.xsafter.xmtpmessenger.data.model.me
@@ -37,6 +40,8 @@ import org.xsafter.xmtpmessenger.ui.screens.add.AddContactScreen
 import org.xsafter.xmtpmessenger.ui.screens.main.Main
 import org.xsafter.xmtpmessenger.ui.screens.register.RegisterScreen
 import org.xsafter.xmtpmessenger.ui.theme.JetchatTheme
+import org.xsafter.xmtpmessenger.utils.LocationPermissionState
+import org.xsafter.xmtpmessenger.viewmodels.LocationViewModel
 import org.xsafter.xmtpmessenger.viewmodels.RegisterViewModel
 import org.xsafter.xmtpmessenger.viewmodels.SplashViewModel
 import javax.inject.Inject
@@ -46,6 +51,7 @@ val Context.credentialsDataStore: DataStore<Preferences> by preferencesDataStore
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: SplashViewModel by viewModels()
+    private val locationViewModel: LocationViewModel by viewModels()
 
     @Inject
     lateinit var client: Client
@@ -63,9 +69,26 @@ class MainActivity : AppCompatActivity() {
 
         splashScreen.setKeepOnScreenCondition{viewModel.isLoading.value}
 
-
         setupLocationServices()
         setupUI()
+
+        val locationPermissionState = LocationPermissionState(this) {
+            if (it.hasPermission()) {
+                locationViewModel.toggleLocationUpdates()
+            }
+        }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val serviceIntent = Intent(this, ForegroundLocationService::class.java)
+        bindService(serviceIntent, locationViewModel, BIND_AUTO_CREATE)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unbindService(locationViewModel)
     }
 
     private fun setupLocationServices() {
@@ -98,6 +121,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    val exceptionHandler =
+        Thread.UncaughtExceptionHandler { _: Thread, e: Throwable ->
+            handleUncaughtException(e)
+        }
+
+    private fun attachUnhandledExceptionHandler() {
+        if (BuildConfig.DEBUG.not()) {
+            Thread.setDefaultUncaughtExceptionHandler(exceptionHandler)
+        }
+    }
+
+    private fun handleUncaughtException(e: Throwable) {
+        val tldrExeption = e.message
+        Toasty.error(this, "Something went terribly wrong!: ")
+    }
 
     private val locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
@@ -165,7 +203,7 @@ class MainActivity : AppCompatActivity() {
 
             composable("add_contact") {
                 AddContactScreen(viewModel =
-                hiltViewModel(),
+                    hiltViewModel(),
                     navController = navController
                 )
             }

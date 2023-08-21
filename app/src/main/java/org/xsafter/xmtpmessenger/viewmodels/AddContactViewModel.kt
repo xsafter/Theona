@@ -18,25 +18,34 @@ class AddContactViewModel @Inject constructor(
     application: Application
 ) : BaseViewModel(application) {
 
-    private val _username = MutableLiveData<String>("")
+    private val _username = MutableLiveData("")
     val username: LiveData<String> = _username
+
+    val myAdress = userRepository.client.address
+
+    fun checkAvailability(): Boolean {
+        if (username.value == "" || username.value == null) return false
+        return userRepository.client.canMessage(username.value!!)
+    }
 
     fun onUsernameChanged(newUsername: String) {
         _username.value = newUsername
     }
 
     fun addUser() {
-        val user =
-            User(
-                username.value!!,
-                username.value!!,
-                createFromObject(username.value!!),
-                "",
-                "",
-                Date()
-            )
         viewModelScope.launch {
+            val user =
+                User(
+                    username.value!!,
+                    username.value!!,
+                    createFromObject(username.value!!),
+                    "",
+                    "",
+                    Date()
+                )
+
             userRepository.insertUser(user)
+            userRepository.refreshUsers()
         }
     }
 }

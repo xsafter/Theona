@@ -3,15 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Required only when requesting background location access on Android 10 (API level 29). -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
+
 
     <application
         android:name=".TheonaApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -19,6 +22,32 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.XMTPMessenger"
         tools:targetApi="31">
+        <service android:foregroundServiceType="location"
+            android:name=".LocationService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
+
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="https://7be6115a258b348f8c9d77a25992c6f1@o4505707923570688.ingest.sentry.io/4505707927764992" /> <!-- enable automatic breadcrumbs for user interactions (clicks, swipes, scrolls) -->
+        <meta-data
+            android:name="io.sentry.traces.user-interaction.enable"
+            android:value="true" /> <!-- enable screenshot for crashes -->
+        <meta-data
+            android:name="io.sentry.attach-screenshot"
+            android:value="true" /> <!-- enable view hierarchy for crashes -->
+        <meta-data
+            android:name="io.sentry.attach-view-hierarchy"
+            android:value="true" /> <!-- enable the performance API by setting a sample-rate, adjust in production env -->
+        <meta-data
+            android:name="io.sentry.traces.sample-rate"
+            android:value="1.0" /> <!-- enable profiling when starting transactions, adjust in production env -->
+        <meta-data
+            android:name="io.sentry.traces.profiling.sample-rate"
+            android:value="1.0" />
+        <meta-data android:name="io.sentry.breadcrumbs.user-interaction" android:value="true" />
+        <meta-data android:name="io.sentry.traces.profiling.sample-rate" android:value="1.0" />
 
         <activity
             android:name=".MainActivity"
@@ -31,5 +60,4 @@
         </activity>
     </application>
 
-    
 </manifest>
