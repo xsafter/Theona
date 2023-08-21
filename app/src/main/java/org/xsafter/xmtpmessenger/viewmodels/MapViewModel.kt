@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.xmtp.android.library.Conversation
-import org.xsafter.xmtpmessenger.data.datastore.ConversationRepository
+import org.xsafter.xmtpmessenger.data.LocationRepository
+import org.xsafter.xmtpmessenger.data.datastore.database.repository.ConversationRepository
 import org.xsafter.xmtpmessenger.data.model.GeoMessage
 import org.xsafter.xmtpmessenger.data.model.GeoMessageWrapper
 import org.xsafter.xmtpmessenger.data.model.User
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val conversationRepository: ConversationRepository
+    private val conversationRepository: ConversationRepository,
+    private val locationRepository: LocationRepository
 ) : ViewModel() {
 
     private val _geoMessages = MutableStateFlow<List<GeoMessageWrapper>>(emptyList())
@@ -27,6 +29,7 @@ class MapViewModel @Inject constructor(
         userIds.forEach { userId ->
             viewModelScope.launch {
                 val geoConversation = conversationRepository.createGeoConversation(userId)
+                locationRepository.addGeoConversation(geoConversation)
                 listenToGeoMessages(geoConversation)
             }
         }
@@ -52,5 +55,6 @@ class MapViewModel @Inject constructor(
                 }
             }
         }
-    }
+    } //0xaE69785837cbc9fB2cf50e6E6419a7044D80eEF3
+
 }

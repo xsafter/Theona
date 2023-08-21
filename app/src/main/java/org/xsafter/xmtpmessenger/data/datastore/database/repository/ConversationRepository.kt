@@ -1,4 +1,4 @@
-package org.xsafter.xmtpmessenger.data.datastore
+package org.xsafter.xmtpmessenger.data.datastore.database.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -10,6 +10,7 @@ import org.xmtp.android.library.Conversation
 import org.xmtp.android.library.DecodedMessage
 import org.xmtp.android.library.messages.InvitationV1ContextBuilder
 import javax.inject.Inject
+
 
 class ConversationRepository @Inject constructor (val client: Client) {
 
@@ -34,5 +35,11 @@ class ConversationRepository @Inject constructor (val client: Client) {
     suspend fun getMessages(conversation: Conversation): Flow<DecodedMessage> = flow {
         val messages = conversation.streamMessages()
         emitAll(messages)
+    }
+
+    suspend fun sendMessage(conversation: Conversation, message: String) {
+        withContext(Dispatchers.IO) {
+            conversation.send(message)
+        }
     }
 }

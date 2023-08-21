@@ -4,8 +4,6 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,9 +17,14 @@ class UsersViewModel @Inject constructor(
     application: Application
 ) : BaseViewModel(application) {
 
-    val users = Pager(PagingConfig(pageSize = 20)) {
-        userRepository.getLocalUsers()
-    }.flow.cachedIn(viewModelScope)
+    init {
+        viewModelScope.launch {
+            userRepository.getAndSaveRemoteUsers()
+            userRepository.listenForNewConversations()
+        }
+    }
+
+    val users = userRepository.getLocalUsers().cachedIn(viewModelScope)
 
     val usersList: LiveData<List<User>> = liveData {
         emit(userRepository.getLocalUsersAsList())
@@ -31,12 +34,6 @@ class UsersViewModel @Inject constructor(
     fun refreshUsers() {
         viewModelScope.launch {
             userRepository.refreshUsers()
-        }
-    }
-
-    fun addUser(user: User) {
-        viewModelScope.launch {
-            userRepository.insertUser(user)
         }
     }
 }

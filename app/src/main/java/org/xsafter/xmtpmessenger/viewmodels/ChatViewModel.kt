@@ -6,17 +6,15 @@ import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.xmtp.android.library.Client
 import org.xmtp.android.library.Conversation
-import org.xsafter.xmtpmessenger.data.datastore.ConversationRepository
+import org.xsafter.xmtpmessenger.data.datastore.database.repository.ConversationRepository
 import org.xsafter.xmtpmessenger.ui.components.chat.Message
 import org.xsafter.xmtpmessenger.ui.components.createFromObject
 
-@HiltViewModel
 class ChatViewModel @AssistedInject constructor(
     @Assisted private val userId: String,
     private val conversationRepository: ConversationRepository

@@ -1,20 +1,24 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    //id ("io.sentry.android.gradle") version "3.12.0"
 
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
     alias(libs.plugins.ksp)
+
 }
 
 android {
     namespace = "org.xsafter.xmtpmessenger"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "org.xsafter.xmtpmessenger"
+        buildConfigField("String", "APPLICATION_ID", "\"org.xsafter.xmtpmessenger\"")
+
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -50,6 +54,7 @@ android {
 
     buildFeatures { // Enables Jetpack Compose for this module
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
@@ -72,7 +77,10 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.ui.graphics)
     implementation(platform(libs.androidx.compose.bom))
-    testImplementation("org.testng:testng:7.8.0")
+    implementation(libs.androidx.lifecycle.service)
+    implementation(libs.androidx.junit.ktx)
+    testImplementation(libs.testng)
+    testImplementation(libs.junit.jupiter)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(platform(libs.androidx.compose.bom))
     val composeBom = platform(libs.androidx.compose.bom)
@@ -108,6 +116,7 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.room.testing)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.core.splashscreen)
 
@@ -130,6 +139,10 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
+    androidTestImplementation(libs.hilt.android.testing)
+    testImplementation(libs.hilt.android.testing)
+    kaptTest(libs.hilt.compiler)
+    kaptAndroidTest(libs.hilt.compiler)
 
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
@@ -138,6 +151,10 @@ dependencies {
     implementation(libs.paging.compose)
     implementation(libs.androidx.room.paging)
     implementation(libs.androidx.room.ktx)
+
+    implementation(libs.sentry.android)
+    implementation(libs.sentry.compose.android)
+    implementation ("com.mapbox.maps:android:10.15.0")
 }
 
 kapt {
