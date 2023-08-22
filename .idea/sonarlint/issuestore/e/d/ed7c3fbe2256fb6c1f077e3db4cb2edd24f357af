@@ -1,4 +1,2 @@
 
-4kotlin:S6310"Avoid hardcoded dispatchers.(á¥ €
-lkotlin:S6306"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(á¥ €
-qkotlin:S6532"MReplace this throw expression with error("Client called before Ready state").(ÚÇ±Ûüÿÿÿÿ8Ö‚ÞÔ›1
+qkotlin:S6532"MReplace this throw expression with error("Client called before Ready state").(ÚÇ±Ûüÿÿÿÿ8Ö‚ÞÔ›1

@@ -29,11 +29,4 @@ class UsersViewModel @Inject constructor(
     val usersList: LiveData<List<User>> = liveData {
         emit(userRepository.getLocalUsersAsList())
     }
-
-
-    fun refreshUsers() {
-        viewModelScope.launch {
-            userRepository.refreshUsers()
-        }
-    }
 }

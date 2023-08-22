@@ -45,6 +45,11 @@
 -dontwarn javax.naming.directory.SearchControls
 -dontwarn javax.naming.directory.SearchResult
 
+-dontwarn com.mapbox.maps.plugin.animation.CameraAnimationsPluginImpl
+-dontwarn com.mapbox.maps.plugin.animation.CameraAnimationsUtils
+-dontwarn com.mapbox.maps.plugin.animation.animator.CameraAnimator
+-dontwarn com.mapbox.maps.plugin.attribution.AttributionViewPlugin
+
 # Needs because proto uses reflection that obfuscation is ruining
 -keep class org.xmtp.proto.message.** { *; }
 # Needs because encryption algorythm selection is probably based on reflection

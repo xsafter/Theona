@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
@@ -31,17 +32,12 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
-import es.dmoral.toasty.Toasty
-import org.xmtp.android.library.BuildConfig
 import org.xmtp.android.library.Client
-import org.xsafter.xmtpmessenger.data.model.GeoMessage
 import org.xsafter.xmtpmessenger.data.model.me
 import org.xsafter.xmtpmessenger.ui.screens.add.AddContactScreen
 import org.xsafter.xmtpmessenger.ui.screens.main.Main
 import org.xsafter.xmtpmessenger.ui.screens.register.RegisterScreen
 import org.xsafter.xmtpmessenger.ui.theme.JetchatTheme
-import org.xsafter.xmtpmessenger.utils.LocationPermissionState
-import org.xsafter.xmtpmessenger.viewmodels.LocationViewModel
 import org.xsafter.xmtpmessenger.viewmodels.RegisterViewModel
 import org.xsafter.xmtpmessenger.viewmodels.SplashViewModel
 import javax.inject.Inject
@@ -51,15 +47,12 @@ val Context.credentialsDataStore: DataStore<Preferences> by preferencesDataStore
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: SplashViewModel by viewModels()
-    private val locationViewModel: LocationViewModel by viewModels()
 
     @Inject
     lateinit var client: Client
 
     private val PERMISSION_ID = 143
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
-    private var geoMessage = GeoMessage(37.4226711, -122.0849872)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -72,24 +65,9 @@ class MainActivity : AppCompatActivity() {
         setupLocationServices()
         setupUI()
 
-        val locationPermissionState = LocationPermissionState(this) {
-            if (it.hasPermission()) {
-                locationViewModel.toggleLocationUpdates()
-            }
-        }
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        val serviceIntent = Intent(this, ForegroundLocationService::class.java)
-        bindService(serviceIntent, locationViewModel, BIND_AUTO_CREATE)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        unbindService(locationViewModel)
-    }
 
     private fun setupLocationServices() {
         if (!checkPermissions()) {
@@ -102,6 +80,11 @@ class MainActivity : AppCompatActivity() {
             locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
         } catch (ex: SecurityException) {
             Log.d("myTag", "Security Exception, no location available")
+        }
+
+        Intent(applicationContext, ForegroundLocationService::class.java).apply {
+            action = ForegroundLocationService.ACTION_START
+            startService(this)
         }
     }
 
@@ -121,22 +104,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    val exceptionHandler =
-        Thread.UncaughtExceptionHandler { _: Thread, e: Throwable ->
-            handleUncaughtException(e)
-        }
-
-    private fun attachUnhandledExceptionHandler() {
-        if (BuildConfig.DEBUG.not()) {
-            Thread.setDefaultUncaughtExceptionHandler(exceptionHandler)
-        }
-    }
-
-    private fun handleUncaughtException(e: Throwable) {
-        val tldrExeption = e.message
-        Toasty.error(this, "Something went terribly wrong!: ")
-    }
-
     private val locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
         }
@@ -148,19 +115,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkPermissions(): Boolean {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            return true
-        }
-        return false
+        return ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION),
-            PERMISSION_ID
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.POST_NOTIFICATIONS),
+                PERMISSION_ID
+            )
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSION_ID
+            )
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

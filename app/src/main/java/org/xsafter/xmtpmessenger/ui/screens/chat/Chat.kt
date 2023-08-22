@@ -59,7 +59,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
@@ -73,6 +72,7 @@ import org.xsafter.xmtpmessenger.ui.components.chat.UserInput
 import org.xsafter.xmtpmessenger.ui.components.chat.messageFormatter
 import org.xsafter.xmtpmessenger.ui.theme.JetchatTheme
 import org.xsafter.xmtpmessenger.viewmodels.ChatViewModel
+import org.xsafter.xmtpmessenger.viewmodels.assisted.chatViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -82,7 +82,7 @@ import java.util.Locale
 fun ConversationContent(
     userId: String,
     navController: NavHostController,
-    viewModel: ChatViewModel = hiltViewModel(),
+    viewModel: ChatViewModel = chatViewModel(userId),
     uiState: ChatUIState,
     navigateToProfile: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -187,7 +187,7 @@ fun ChannelNameBar(
                 imageVector = Icons.Outlined.Search,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
-                    .clickable(onClick = { TODO() })
+                    .clickable(onClick = {  })
                     .padding(horizontal = 12.dp, vertical = 16.dp)
                     .height(24.dp),
                 contentDescription = "search"
@@ -227,7 +227,7 @@ fun Messages(
                 .testTag(ConversationTestTag)
                 .fillMaxSize()
         ) {
-            items(messages) { content ->
+            items(messages.reversed()) { content ->
                 val index = messages.indexOf(content)
                 val prevAuthor = messages.getOrNull(index - 1)?.author
                 val nextAuthor = messages.getOrNull(index + 1)?.author
@@ -237,7 +237,7 @@ fun Messages(
                 val prevMessageDate = messages.getOrNull(index - 1)?.timestamp
                 val nextMessageDate = messages.getOrNull(index + 1)?.timestamp
                 if (nextMessageDate == null && messageDate != null) {
-                    DayHeader(fancyDateString(messageDate))
+                    //DayHeader(fancyDateString(messageDate))
                 }
 
                 Message(

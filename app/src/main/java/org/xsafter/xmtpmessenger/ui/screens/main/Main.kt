@@ -27,12 +27,13 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import io.sentry.compose.SentryTraced
 import org.xmtp.android.library.Client
 import org.xsafter.xmtpmessenger.data.model.User
-import org.xsafter.xmtpmessenger.ui.components.Map
+import org.xsafter.xmtpmessenger.ui.components.Content
 import org.xsafter.xmtpmessenger.ui.components.chat.ChatUIState
 import org.xsafter.xmtpmessenger.ui.navigation.BottomBar
 import org.xsafter.xmtpmessenger.ui.navigation.Routing
 import org.xsafter.xmtpmessenger.ui.screens.chat.ConversationContent
 import org.xsafter.xmtpmessenger.utils.ClientManager
+import org.xsafter.xmtpmessenger.utils.getCurrentLocation
 import org.xsafter.xmtpmessenger.viewmodels.MapViewModel
 import org.xsafter.xmtpmessenger.viewmodels.UsersViewModel
 
@@ -66,6 +67,14 @@ fun Routing.Main.Content(
         mapViewModel.setupGeoConversations(usernames)
 
         val geoMessages = mapViewModel.geoMessages
+        Log.e("geo_messages", geoMessages.value.joinToString())
+
+        var lat = 0.0
+        var lng = 0.0
+        getCurrentLocation {
+            lat = it.latitude
+            lng = it.longitude
+        }
 
         Box {
             Scaffold(
@@ -114,7 +123,7 @@ fun Routing.Main.Content(
                         }
 
                         composable(Routing.Main.BottomNav.Map.route) {
-                            Map(lat = 0.0, lng = 0.0, zoom = 12.0, geoMessageFlow = geoMessages)
+                            Routing.Main.BottomNav.Map.Content(lat = lat, lng = lng, zoom = 12.0, geoMessageFlow = geoMessages)
                         }
                     }
                 }
@@ -180,7 +189,7 @@ fun Main(
                 ConversationContent(
                     userId = userId!!,
                     uiState = ChatUIState(
-                        userId.take(5),
+                        "${userId.take(14)}...",
                         2,
                         mutableListOf()
                     ),
@@ -196,3 +205,5 @@ fun Main(
         }
     }
 }
+
+

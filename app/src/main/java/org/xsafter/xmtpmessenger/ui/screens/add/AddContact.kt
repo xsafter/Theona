@@ -1,7 +1,6 @@
 package org.xsafter.xmtpmessenger.ui.screens.add
 
 import android.widget.Toast
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,9 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.PersonAdd
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -53,6 +52,27 @@ fun AddContactScreen(viewModel: AddContactViewModel, navController: NavHostContr
             verticalArrangement = Arrangement.Center
         ) {
 
+            Row(
+                modifier = Modifier
+                    .padding(top = 4.dp, bottom = 8.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start) {
+                Button(onClick = { navController.popBackStack() }, modifier = Modifier) {
+                    Row (verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Cancel",
+                            modifier = Modifier
+                                .padding(end = 4.dp)
+                        )
+                        Text(
+                            text = "Cancel",
+                            style = MaterialTheme.typography.titleSmall,
+                        )
+                    }
+                }
+            }
+
             Icon(
                 imageVector = Icons.Default.PersonAdd,
                 contentDescription = "Add Contact Icon",
@@ -80,11 +100,7 @@ fun AddContactScreen(viewModel: AddContactViewModel, navController: NavHostContr
                     .fillMaxWidth()
             )
 
-            Text(
-                text = "My adress:",
-                modifier = Modifier.padding(top = 16.dp),
-                color = MaterialTheme.colorScheme.primary
-            )
+            AddressView(myAdress)
 
 
 
@@ -116,13 +132,7 @@ fun AddContactScreen(viewModel: AddContactViewModel, navController: NavHostContr
 
 @Composable
 fun AddressView(address: String) {
-    // This is for the ripple animation
-    val interactionSource = remember { MutableInteractionSource() }
-    var isAddressCopied by remember { mutableStateOf(false) }
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
-
-    // Add a ripple when the element is pressed
-    val pressIndicator = rememberRipple(bounded = false)
 
     Column {
         Row(modifier = Modifier

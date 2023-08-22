@@ -40,7 +40,6 @@ import org.xsafter.xmtpmessenger.R
 import org.xsafter.xmtpmessenger.viewmodels.RegisterViewModel
 
 @Composable
-//@Preview
 fun RegisterScreen(
     viewModel: RegisterViewModel,
     navController: NavHostController
@@ -133,7 +132,7 @@ fun RegisterScreen(
 
         Button(
             onClick = {
-                      if (! usernameState.value.text.isEmpty() && ! passwordState.value.text.isEmpty() && ! confirmPasswordState.value.text.isEmpty()
+                      if (usernameState.value.text.isNotEmpty() && passwordState.value.text.isNotEmpty() && confirmPasswordState.value.text.isNotEmpty()
                           && passwordState.value.text == confirmPasswordState.value.text
                           && passwordState.value.text.length  >= 6) {
 
