@@ -1,9 +1,11 @@
 package org.xsafter.xmtpmessenger.data.datastore.database.repository
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.withContext
 import org.xmtp.android.library.Client
 import org.xmtp.android.library.Conversation
@@ -25,15 +27,18 @@ class ConversationRepository @Inject constructor (val client: Client) {
 
     suspend fun createGeoConversation(userId: String): Conversation {
         return withContext(Dispatchers.IO) {
-            client.conversations.newConversation(
+            val conversation = client.conversations.newConversation(
                 userId,
                 context = InvitationV1ContextBuilder.buildFromConversation("theona/geodata")
             )
+            Log.d("ConversationRepository", "Conversation created: $conversation")
+            conversation
         }
     }
 
     suspend fun getMessages(conversation: Conversation): Flow<DecodedMessage> = flow {
         val messages = conversation.streamMessages()
+        Log.d("ConversationRepository", "Messages retrieved: ${messages.toList().joinToString()}")
         emitAll(messages)
     }
 

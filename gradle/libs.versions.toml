@@ -2,13 +2,14 @@
 accompanistCoil = "0.6.2"
 coilSvg = "2.4.0"
 com-android-application = "8.2.0-alpha15"
-coreSplashscreen = "1.0.0-beta02"
+coreSplashscreen = "1.0.1"
 datastoreCore = "1.0.0"
 espresso-core = "3.5.1"
 appcompat = "1.6.1"
 gson = "2.10.1"
 hiltAndroidTesting = "2.44"
 junitJupiter = "5.8.1"
+mapbox-android = "10.15.0"
 material3 = "1.1.1"
 org-jetbrains-kotlin-android = "1.8.22"
 constraintlayout = "2.1.4"
@@ -121,6 +122,7 @@ junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jun
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+maps-android = { module = "com.mapbox.maps:android", version.ref = "mapbox-android" }
 okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 osmdroid-android = { module = "org.osmdroid:osmdroid-android", version.ref = "osmdroidAndroid" }

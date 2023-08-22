@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    //id ("io.sentry.android.gradle") version "3.12.0"
+    id ("io.sentry.android.gradle") version "3.12.0"
 
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
@@ -67,10 +67,24 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/README.md"
+            excludes += "sources/**"
+        }
+        jniLibs.pickFirsts += mutableSetOf("lib/**/libA.so")
+    }
+
+    splits {
+        abi {
+
+            isEnable = true
+            reset()
+
+            include("armabi", "armeabi-v7a", "x86_64")
+
+            isUniversalApk = false
         }
     }
 }
-
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
@@ -154,9 +168,17 @@ dependencies {
 
     implementation(libs.sentry.android)
     implementation(libs.sentry.compose.android)
-    implementation ("com.mapbox.maps:android:10.15.0")
+    implementation (libs.maps.android) {
+        exclude(group = "com.mapbox.plugin", module = "maps-animation")
+        exclude(group = "com.mapbox.plugin", module = "maps-attribution")
+        exclude(group = "com.mapbox.plugin", module = "maps-gesures")
+    }
 }
 
 kapt {
     correctErrorTypes = true
+}
+
+sentry {
+    includeSourceContext.set(true)
 }

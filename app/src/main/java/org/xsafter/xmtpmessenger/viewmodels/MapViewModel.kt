@@ -1,5 +1,6 @@
 package org.xsafter.xmtpmessenger.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -24,6 +25,7 @@ class MapViewModel @Inject constructor(
 
     private val _geoMessages = MutableStateFlow<List<GeoMessageWrapper>>(emptyList())
     val geoMessages: StateFlow<List<GeoMessageWrapper>> = _geoMessages
+    val gson = Gson()
 
     fun setupGeoConversations(userIds: MutableList<String>) {
         userIds.forEach { userId ->
@@ -40,8 +42,9 @@ class MapViewModel @Inject constructor(
             val gson = Gson()
             val messagesFlow = conversationRepository.getMessages(geoConversation)
             messagesFlow.collect { message ->
+                Log.d("MapViewModel", message.body)
                 if (message.body.startsWith("{")) {
-                    GeoMessageWrapper(
+                    val geoWrapper = GeoMessageWrapper(
                         gson.fromJson(message.body, GeoMessage::class.java),
                         User(
                             message.senderAddress,
@@ -52,9 +55,10 @@ class MapViewModel @Inject constructor(
                             message.sent
                         )
                     )
+                    _geoMessages.value = _geoMessages.value.toMutableList().apply { add(geoWrapper) }
                 }
             }
         }
-    } //0xaE69785837cbc9fB2cf50e6E6419a7044D80eEF3
+    }
 
 }

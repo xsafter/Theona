@@ -12,7 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import org.xsafter.xmtpmessenger.hasPermission
 
 class LocationPermissionState(
     private val activity: ComponentActivity,

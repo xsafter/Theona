@@ -217,12 +217,6 @@ private fun UserInputSelector(
             selected = currentInputSelector == InputSelector.EMOJI,
             description = "Show Emoji selector"
         )
-//        InputSelectorButton(
-//            onClick = { onSelectorChange(InputSelector.DM) },
-//            icon = Icons.Outlined.AlternateEmail,
-//            selected = currentInputSelector == InputSelector.DM,
-//            description = "Direct Message"
-//        )
         InputSelectorButton(
             onClick = { onSelectorChange(InputSelector.PICTURE) },
             icon = Icons.Outlined.InsertPhoto,
@@ -235,12 +229,6 @@ private fun UserInputSelector(
             selected = currentInputSelector == InputSelector.MAP,
             description = "Add Location"
         )
-//        InputSelectorButton(
-//            onClick = { onSelectorChange(InputSelector.PHONE) },
-//            icon = Icons.Outlined.Duo,
-//            selected = currentInputSelector == InputSelector.PHONE,
-//            description = "Video Chat"
-//        )
 
         val border = if (!sendMessageEnabled) {
             BorderStroke(

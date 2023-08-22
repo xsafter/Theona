@@ -1,5 +1,6 @@
 package org.xsafter.xmtpmessenger.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -44,12 +45,12 @@ class ChatViewModel @AssistedInject constructor(
 
     init {
         setupConversation()
-        fetchMessages()
     }
 
     private fun setupConversation() {
         viewModelScope.launch {
             conversation = conversationRepository.createMainConversation(userId)
+            fetchMessages()
         }
     }
 
@@ -64,6 +65,8 @@ class ChatViewModel @AssistedInject constructor(
                     authorAvatar = createFromObject(message.senderAddress)
                 )
             }
+
+            Log.d("ChatViewModel", "messages: ${_messages.value}")
         }
     }
 
