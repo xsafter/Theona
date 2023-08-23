@@ -11147,9 +11147,6 @@ x
 Happ/src/main/java/org/xsafter/xmtpmessenger/viewmodels/UsersViewModel.kt,1/2/12d216b526b81b505831382405327ae48576816b
 <
 Gemfile.lock,2/1/21fb5836b499a2be648386aac055d2e069160d6c
-:
-
-.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
 A
 fastlane/Fastfile,9/f/9f0f12aa0bd74d8115ab3d187b7d8ddcfcc1cc70
 
