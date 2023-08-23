@@ -1,22 +1,26 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    id ("io.sentry.android.gradle") version "3.12.0"
 
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.ksp)
 
 }
 
 android {
     namespace = "org.xsafter.xmtpmessenger"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "org.xsafter.xmtpmessenger"
+        buildConfigField("String", "APPLICATION_ID", "\"org.xsafter.xmtpmessenger\"")
+
         minSdk = 28
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = 34
+        versionCode = 3
+        versionName = "1.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -25,21 +29,21 @@ android {
     }
 
     buildTypes {
-        release {
-            isMinifyEnabled = false
-            isDebuggable = false
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
-        getByName("release") {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android.txt"),
-                "proguard-rules.pro"
-            )
+
+        getByName("debug") {
+            isMinifyEnabled = false
+            applicationIdSuffix = ".debug"
+            isDebuggable = true
         }
 
     }
@@ -50,10 +54,11 @@ android {
 
     buildFeatures { // Enables Jetpack Compose for this module
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
+        kotlinCompilerExtensionVersion = "1.4.8"
     }
 
     kotlinOptions {
@@ -62,20 +67,34 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/README.md"
+            excludes += "sources/**"
+        }
+        jniLibs.pickFirsts += mutableSetOf("lib/**/libA.so")
+    }
+
+    splits {
+        abi {
+
+            isEnable = true
+            reset()
+
+            include("armabi", "armeabi-v7a", "arm64-v8a", "x86_64")
+
+            isUniversalApk = false
         }
     }
 }
 
-
 dependencies {
-
-    implementation(libs.lifecycle.runtime.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.ui.graphics)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.lifecycle.service)
+    implementation(libs.androidx.junit.ktx)
+    testImplementation(libs.testng)
+    testImplementation(libs.junit.jupiter)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(platform(libs.androidx.compose.bom))
     val composeBom = platform(libs.androidx.compose.bom)
@@ -91,9 +110,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.androidx.lifecycle.viewModelCompose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.navigation.fragment)
-    implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.google.android.material)
 
     implementation(libs.androidx.compose.foundation.layout)
@@ -101,9 +117,6 @@ dependencies {
     implementation(libs.androidx.compose.material.iconsExtended)
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.ui.util)
-    implementation(libs.androidx.compose.ui.viewbinding)
-    implementation(libs.androidx.compose.ui.googlefonts)
 
     implementation(libs.androidx.compose.material)
 
@@ -117,29 +130,51 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.room.testing)
     implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.androidx.core.splashscreen)
 
-    implementation("org.xmtp:android:0.0.9")
-    implementation (libs.tink)
+    implementation("org.xmtp:android:0.3.5")
 
     implementation(libs.androidx.datastore.preferences)
     implementation (libs.play.services.location)
+    implementation (libs.gson)
 
     implementation (libs.toasty)
 
     implementation(libs.osmdroid.android)
 
-    implementation ("androidx.compose.material3:material3:1.1.0")
+    implementation (libs.androidx.material3)
 
     implementation(libs.coil.kt.compose)
-    implementation("io.coil-kt:coil-svg:2.2.2")
-    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.6.2")
+    implementation(libs.coil.svg)
 
     implementation(libs.androidx.navigation.compose)
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.compiler)
+    androidTestImplementation(libs.hilt.android.testing)
+    testImplementation(libs.hilt.android.testing)
+    kaptTest(libs.hilt.compiler)
+    kaptAndroidTest(libs.hilt.compiler)
+
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.paging.compose)
+    implementation(libs.androidx.room.paging)
+    implementation(libs.androidx.room.ktx)
+
+    implementation(libs.sentry.android)
+    implementation(libs.sentry.compose.android)
+    implementation (libs.maps.android)
 }
 
 kapt {
     correctErrorTypes = true
+}
+
+sentry {
+    includeSourceContext.set(true)
 }

@@ -20,6 +20,10 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-keepattributes LineNumberTable,SourceFile
+-renamesourcefileattribute SourceFile
+
+
 -dontwarn java.beans.ConstructorProperties
 -dontwarn java.beans.Transient
 -dontwarn org.bouncycastle.jsse.BCSSLParameters
@@ -31,3 +35,30 @@
 -dontwarn org.openjsse.javax.net.ssl.SSLParameters
 -dontwarn org.openjsse.javax.net.ssl.SSLSocket
 -dontwarn org.openjsse.net.ssl.OpenJSSE
+
+-dontwarn javax.naming.NamingEnumeration
+-dontwarn javax.naming.NamingException
+-dontwarn javax.naming.directory.Attribute
+-dontwarn javax.naming.directory.Attributes
+-dontwarn javax.naming.directory.DirContext
+-dontwarn javax.naming.directory.InitialDirContext
+-dontwarn javax.naming.directory.SearchControls
+-dontwarn javax.naming.directory.SearchResult
+
+-dontwarn com.mapbox.maps.plugin.animation.CameraAnimationsPluginImpl
+-dontwarn com.mapbox.maps.plugin.animation.CameraAnimationsUtils
+-dontwarn com.mapbox.maps.plugin.animation.animator.CameraAnimator
+-dontwarn com.mapbox.maps.plugin.attribution.AttributionViewPlugin
+
+# Needs because proto uses reflection that obfuscation is ruining
+-keep class org.xmtp.proto.message.** { *; }
+# Needs because encryption algorythm selection is probably based on reflection
+-keep class org.xmtp.android.library.messages.** { *; }
+
+#-keep class org.bouncycastle.jsse.** { *; }
+-keep class org.bouncycastle.** { *; }
+
+-keepclassmembers,allowobfuscation class * {
+  @com.google.gson.annotations.SerializedName <fields>;
+}
+-keep,allowobfuscation @interface com.google.gson.annotations.SerializedName
