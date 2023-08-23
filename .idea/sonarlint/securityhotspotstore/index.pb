@@ -11164,8 +11164,6 @@ Kapp/src/main/java/org/xsafter/xmtpmessenger/viewmodels/LocationViewModel.kt,a/
 Gemfile,d/e/de3150c01c3a946a6168173c4116741379fe3579
 {
 Kapp/src/main/java/org/xsafter/xmtpmessenger/ui/components/chat/ChatInput.kt,5/1/51ea1f2473030fa9a39d9b509277eb9a149acb3e
-A
-sentry.properties,4/d/4d9f3d1ca006eedc04fb174fbe25f861933ef854
 v
 Fapp/src/main/java/org/xsafter/xmtpmessenger/location/LocationClient.kt,3/d/3d42e0cb39ee0fb2dd4b0887bdd5bc0e902cb328
 w
@@ -11194,3 +11192,11 @@ u
 Eapp/src/main/java/org/xsafter/xmtpmessenger/utils/DataStoreManager.kt,7/4/74935c66ee44a2952f6350256409d0fc7e16453a
 n
 >app/src/main/java/org/xsafter/xmtpmessenger/di/ClientModule.kt,c/e/ceed9a6a29ab75b453737aba3407a204a5ad44c4
+P
+ app/release/output-metadata.json,0/7/079ee2b81fdfd2faf349bcf552fe1a1bc16be431
+Ç
+Rapp/src/main/java/org/xsafter/xmtpmessenger/data/datastore/database/AppDatabase.kt,2/b/2ba57f26d1d0d9426e78271a71f2c6055aec81f7
+ê
+`app/src/main/java/org/xsafter/xmtpmessenger/data/datastore/database/repository/UserRepository.kt,3/a/3a102fec894e4184e7534ea8c9376868f8229caa
+w
+G.idea/sonarlint/issuestore/9/6/9610840bb88a754f4bef71830fc773339bb7868e,2/8/28da2492d4a94fa7a07eb69117e4cf116d5f7a7e

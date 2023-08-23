@@ -10944,8 +10944,6 @@ Fapp/src/main/java/org/xsafter/xmtpmessenger/data/LocationRepository.kt,6/2/623
 Kapp/src/main/java/org/xsafter/xmtpmessenger/viewmodels/LocationViewModel.kt,a/6/a6191856d2743f0ff607508ff453c3648f8444fc
 Å
 Qapp/src/main/java/org/xsafter/xmtpmessenger/ui/screens/register/RegisterScreen.kt,9/6/9610840bb88a754f4bef71830fc773339bb7868e
-A
-sentry.properties,4/d/4d9f3d1ca006eedc04fb174fbe25f861933ef854
 p
 @app/src/main/java/org/xsafter/xmtpmessenger/TheonaApplication.kt,c/0/c0a1f4d546574cd0e8085272ac48abbb978fae5e
 x
@@ -10974,3 +10972,11 @@ u
 Eapp/src/main/java/org/xsafter/xmtpmessenger/utils/DataStoreManager.kt,7/4/74935c66ee44a2952f6350256409d0fc7e16453a
 n
 >app/src/main/java/org/xsafter/xmtpmessenger/di/ClientModule.kt,c/e/ceed9a6a29ab75b453737aba3407a204a5ad44c4
+w
+G.idea/sonarlint/issuestore/9/6/9610840bb88a754f4bef71830fc773339bb7868e,2/8/28da2492d4a94fa7a07eb69117e4cf116d5f7a7e
+Ç
+Rapp/src/main/java/org/xsafter/xmtpmessenger/data/datastore/database/AppDatabase.kt,2/b/2ba57f26d1d0d9426e78271a71f2c6055aec81f7
+P
+ app/release/output-metadata.json,0/7/079ee2b81fdfd2faf349bcf552fe1a1bc16be431
+ê
+`app/src/main/java/org/xsafter/xmtpmessenger/data/datastore/database/repository/UserRepository.kt,3/a/3a102fec894e4184e7534ea8c9376868f8229caa
