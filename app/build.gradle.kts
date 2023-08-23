@@ -19,8 +19,8 @@ android {
 
         minSdk = 28
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -79,7 +79,7 @@ android {
             isEnable = true
             reset()
 
-            include("armabi", "armeabi-v7a", "x86_64")
+            include("armabi", "armeabi-v7a", "arm64-v8a", "x86_64")
 
             isUniversalApk = false
         }
@@ -168,11 +168,7 @@ dependencies {
 
     implementation(libs.sentry.android)
     implementation(libs.sentry.compose.android)
-    implementation (libs.maps.android) {
-        exclude(group = "com.mapbox.plugin", module = "maps-animation")
-        exclude(group = "com.mapbox.plugin", module = "maps-attribution")
-        exclude(group = "com.mapbox.plugin", module = "maps-gesures")
-    }
+    implementation (libs.maps.android)
 }
 
 kapt {

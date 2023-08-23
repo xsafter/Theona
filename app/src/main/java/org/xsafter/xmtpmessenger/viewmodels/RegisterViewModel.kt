@@ -89,7 +89,7 @@ class RegisterViewModel (
 
     // check if at least one user is registered
     suspend fun isRegistered(): Boolean {
-        return readKeys() != null || readKeys() != ""
+        return (readKeys() != null && readKeys() != "")
     }
 
 

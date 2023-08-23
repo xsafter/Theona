@@ -3,9 +3,10 @@ package org.xsafter.xmtpmessenger.data.datastore.database.repository
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.withContext
 import org.xmtp.android.library.Client
 import org.xmtp.android.library.Conversation
@@ -37,9 +38,10 @@ class ConversationRepository @Inject constructor (val client: Client) {
     }
 
     suspend fun getMessages(conversation: Conversation): Flow<DecodedMessage> = flow {
-        val messages = conversation.streamMessages()
-        Log.d("ConversationRepository", "Messages retrieved: ${messages.toList().joinToString()}")
-        emitAll(messages)
+        val messages = conversation.messages().asFlow()
+        val streamMessages = conversation.streamMessages()
+        val messageFlow = merge(messages, streamMessages)
+        emitAll(messageFlow)
     }
 
     suspend fun sendMessage(conversation: Conversation, message: String) {

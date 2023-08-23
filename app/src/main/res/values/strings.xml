@@ -1,7 +1,6 @@
 <resources>
-    <string name="app_name">XMTPMessenger</string>
-    <string name="title_activity_register">RegisterActivity</string>
-    <string name="title_activity_main2">MainActivity2</string>
+    <string name="app_name">Theona</string>
+    <string name="title_activity_main">MainActivity</string>
 
     <string name="mapbox_access_token">pk.eyJ1IjoieHNhZnRlciIsImEiOiJjbGp0cnBrbTAwNnR3M2ltbGd0YjNpMTFmIn0.7l2j6k15YtkKIqeTKL4oLQ</string>
 </resources>
