@@ -71,7 +71,7 @@ class UserRepository @Inject constructor(private val userDao: UserDao, val clien
     suspend fun insertUser(user: User) = withContext(Dispatchers.IO) {
         if (!client.canMessage(user.id))
             throw XMTPException("User is not on the network")
-
+        client.conversations.newConversation(user.id)
         userDao.insertUser(user)
     }
 }

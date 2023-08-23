@@ -7,6 +7,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -104,6 +105,7 @@ fun MapboxMapContainer(
                         .withIconImage(testBitmap)
 
                     pointAnnotationManager?.create(pointAnnotationOptions)
+                    Log.d("Mapbox", "Point created")
                 }
 
                 setMapInitialized(true)

@@ -91,7 +91,7 @@ fun ConversationContent(
     val authorMe = "me"
     val timeNow = System.currentTimeMillis()
 
-
+    //viewModel.fetchMessages()
     val messagesState by viewModel.messages.collectAsState()
 
     uiState.messages = messagesState
