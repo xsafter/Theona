@@ -11145,6 +11145,3 @@ D
 app/build.gradle.kts,d/2/d2a4383452aad84a18429a5844d31330a012a9e6
 @
 local.properties,0/7/0712df971a99ac4d2fccb8e0fb19f377f3374cca
-:
-
-.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
