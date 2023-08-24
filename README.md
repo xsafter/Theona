@@ -30,10 +30,11 @@
 <br />
 <div align="center">
   <a href="https://github.com/xsafter/Theona">
-    <img src="images/logo.png" alt="Logo" width="160" height="160">
+    <img src="images/logo_nightly.png" alt="Logo" width="160" height="160">
   </a>
 
 <h2 align="center">Theona</h2>
+<h2 align="center">⚠️**Warning! This is development branch, all changes here are unstable.**</h2>
 
   <p align="center">
     Secure blockchain-based messenger with geolocation tracking
