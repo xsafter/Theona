@@ -34,7 +34,7 @@
   </a>
 
 <h2 align="center">Theona</h2>
-<h2 align="center">⚠️**Warning! This is development branch, all changes here are unstable.**</h2>
+<h2 align="center">⚠️Warning! This is development branch, all changes here are unstable.</h2>
 
   <p align="center">
     Secure blockchain-based messenger with geolocation tracking
@@ -134,7 +134,7 @@ plugins {
 sentry {
     includeSourceContext.set(true)
 }
-   ```
+```
 5. Build & run the app!
 ```sh 
 ./gradlew assembleDebug
