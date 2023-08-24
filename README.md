@@ -82,7 +82,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+![Theona screenshot][product-screenshot]
 
 Theona is XMTP-based messenger for comfortable and secure messaging and tracking the location of your friends. 
 
@@ -231,7 +231,7 @@ Project Link: [https://github.com/xsafter/Theona](https://github.com/xsafter/The
 [license-url]: https://github.com/xsafter/Theona/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshots.png
+[product-screenshot]: images/Screenshots.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [Android-badge]: https://img.shields.io/badge/android-000000?style=for-the-badge&logo=android&colorB=555
