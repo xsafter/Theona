@@ -26,8 +26,8 @@ jobs:
 
     - name: Access MAPBOX_DOWNLOADS_TOKEN
       env:
-        MAPBOX_DOWNLOADS_TOKEN: $
-      run: echo project.ext.MAPBOX_DOWNLOADS_TOKEN=\"$MAPBOX_DOWNLOADS_TOKEN\" > ./local.properties
+        MAPBOX_DOWNLOADS_TOKEN: ${{secrets.MAPBOX_DOWNLOADS_TOKEN}}
+      run: echo project.ext.MAPBOX_DOWNLOADS_TOKEN=\"${{secrets.MAPBOX_DOWNLOADS_TOKEN}}\" > ./local.properties
 
     - name: Access SENTRY_TOKEN
       env:
