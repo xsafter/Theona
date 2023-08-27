@@ -31,8 +31,8 @@ jobs:
 
     - name: Access SENTRY_TOKEN
       env:
-        SENTRY_TOKEN: $
-      run: echo "[auth]\ntoken=\"$SENTRY_TOKEN\"" > ~/.sentryclirc
+        SENTRY_TOKEN: ${{secrets.SENTRY_TOKEN}}
+      run: echo "[auth]\ntoken=\"${{secrets.SENTRY_TOKEN}}\"" > ~/.sentryclirc
 
     - name: Build with Gradle
       run: ./gradlew build
