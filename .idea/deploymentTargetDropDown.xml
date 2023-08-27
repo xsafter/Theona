@@ -2,15 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="AddressViewPreview">
-        <State />
-      </entry>
-      <entry key="MapPreview (1)">
-        <State />
-      </entry>
-      <entry key="MapboxPreview">
-        <State />
-      </entry>
       <entry key="app">
         <State />
       </entry>

@@ -1,18 +1,19 @@
-name: Android CI
+name: Build and Release
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
+    tags:
+      - "v*"
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
+
     - name: set up JDK 17
       uses: actions/setup-java@v3
       with:
@@ -22,5 +23,16 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+
+    - name: Access MAPBOX_DOWNLOADS_TOKEN
+      env:
+        MAPBOX_DOWNLOADS_TOKEN: $
+      run: echo project.ext.MAPBOX_DOWNLOADS_TOKEN=\"$MAPBOX_DOWNLOADS_TOKEN\" > ./local.properties
+
+    - name: Access SENTRY_TOKEN
+      env:
+        SENTRY_TOKEN: $
+      run: echo "[auth]\ntoken=\"$SENTRY_TOKEN\"" > ~/.sentryclirc
+
     - name: Build with Gradle
       run: ./gradlew build

@@ -9749,16 +9749,12 @@ F
 app-release/res/5l.xml,5/2/52b663253657c86aa93cf2845028963eb6259452
 F
 app-release/res/7G.xml,c/1/c1504dd49f573c384335912c1c8e072631e55a69
-C
-settings.gradle.kts,7/4/749edfcc96398253e5b3416184e95c46621da850
 F
 app-release/res/Mp.xml,7/5/75cca484ea65603336daa3888ef4051818c67dbd
 ;
 gradlew.bat,2/a/2a45a911a8f1836b0b6c5b758962572012d8f8c3
 F
 app-release/res/SG.xml,f/3/f3a63860f9a7e813ca5af88979b1e9d169cb2a34
-@
-build.gradle.kts,d/b/dbcff70658daf80b53ce624f6adcaa529df5ed8d
 F
 app-release/res/4P.xml,e/5/e5a945b8f60eeeabe227ed259b97d7ccb7be11c2
 F
@@ -11141,10 +11137,3 @@ w
 G.idea/sonarlint/issuestore/9/6/9610840bb88a754f4bef71830fc773339bb7868e,2/8/28da2492d4a94fa7a07eb69117e4cf116d5f7a7e
 s
 Capp/src/main/java/org/xsafter/xmtpmessenger/ui/screens/chat/Chat.kt,a/8/a8a0ceec43879b6ce664214b046ef6d4183b3112
-D
-app/build.gradle.kts,d/2/d2a4383452aad84a18429a5844d31330a012a9e6
-@
-local.properties,0/7/0712df971a99ac4d2fccb8e0fb19f377f3374cca
-:
-
-.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302

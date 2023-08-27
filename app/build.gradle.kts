@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
@@ -84,6 +87,13 @@ android {
             isUniversalApk = false
         }
     }
+}
+
+fun getSentryToken(): String {
+    val prop = Properties().apply {
+        load(FileInputStream(File(rootProject.rootDir, "local.properties")))
+    }
+    return prop.getProperty("SENTRY_TOKEN")
 }
 
 dependencies {
