@@ -1,6 +1,5 @@
 package org.xsafter.xmtpmessenger.ui.screens.main
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -159,7 +158,6 @@ fun PreviewRoutingMainContent() {
 @Composable
 fun Main(
     client: Client,
-    context: Context,
     navController: NavHostController,
     mainNavController: NavHostController
 ) {
@@ -186,6 +184,7 @@ fun Main(
                 arguments = listOf(navArgument("userId") { type = NavType.StringType })
             ) {
                 val userId = it.arguments?.getString("userId")
+                
                 ConversationContent(
                     userId = userId!!,
                     uiState = ChatUIState(

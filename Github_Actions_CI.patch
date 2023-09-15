@@ -1,0 +1,220 @@
+Subject: [PATCH] Github Actions CI
+---
+Index: sentry.properties
+===================================================================
+diff --git a/sentry.properties b/sentry.properties
+deleted file mode 100644
+--- a/sentry.properties	(revision 4a7dd285ed192acf5700c61a3451284902068513)
++++ /dev/null	(revision 4a7dd285ed192acf5700c61a3451284902068513)
+@@ -1,4 +0,0 @@
+-defaults.project=theona
+-defaults.org=xsafter
+-auth.token=ad3566c6c5f0211e89b0bd78930caa1979785e40fd7cba539f67ca1fb34917b4
+-stack.module=org.xsafter.** +app
+\ No newline at end of file
+Index: app/release/output-metadata.json
+===================================================================
+diff --git a/app/release/output-metadata.json b/app/release/output-metadata.json
+deleted file mode 100644
+--- a/app/release/output-metadata.json	(revision 4a7dd285ed192acf5700c61a3451284902068513)
++++ /dev/null	(revision 4a7dd285ed192acf5700c61a3451284902068513)
+@@ -1,51 +0,0 @@
+-{
+-  "version": 3,
+-  "artifactType": {
+-    "type": "APK",
+-    "kind": "Directory"
+-  },
+-  "applicationId": "org.xsafter.xmtpmessenger",
+-  "variantName": "release",
+-  "elements": [
+-    {
+-      "type": "ONE_OF_MANY",
+-      "filters": [
+-        {
+-          "filterType": "ABI",
+-          "value": "armeabi-v7a"
+-        }
+-      ],
+-      "attributes": [],
+-      "versionCode": 3,
+-      "versionName": "1.1.1",
+-      "outputFile": "app-armeabi-v7a-release.apk"
+-    },
+-    {
+-      "type": "ONE_OF_MANY",
+-      "filters": [
+-        {
+-          "filterType": "ABI",
+-          "value": "x86_64"
+-        }
+-      ],
+-      "attributes": [],
+-      "versionCode": 3,
+-      "versionName": "1.1.1",
+-      "outputFile": "app-x86_64-release.apk"
+-    },
+-    {
+-      "type": "ONE_OF_MANY",
+-      "filters": [
+-        {
+-          "filterType": "ABI",
+-          "value": "arm64-v8a"
+-        }
+-      ],
+-      "attributes": [],
+-      "versionCode": 3,
+-      "versionName": "1.1.1",
+-      "outputFile": "app-arm64-v8a-release.apk"
+-    }
+-  ],
+-  "elementType": "File"
+-}
+\ No newline at end of file
+Index: .idea/deploymentTargetDropDown.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/deploymentTargetDropDown.xml b/.idea/deploymentTargetDropDown.xml
+--- a/.idea/deploymentTargetDropDown.xml	(revision 4a7dd285ed192acf5700c61a3451284902068513)
++++ b/.idea/deploymentTargetDropDown.xml	(date 1693150561388)
+@@ -2,15 +2,6 @@
+ <project version="4">
+   <component name="deploymentTargetDropDown">
+     <value>
+-      <entry key="AddressViewPreview">
+-        <State />
+-      </entry>
+-      <entry key="MapPreview (1)">
+-        <State />
+-      </entry>
+-      <entry key="MapboxPreview">
+-        <State />
+-      </entry>
+       <entry key="app">
+         <State />
+       </entry>
+Index: .idea/sonarlint/issuestore/index.pb
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/sonarlint/issuestore/index.pb b/.idea/sonarlint/issuestore/index.pb
+--- a/.idea/sonarlint/issuestore/index.pb	(revision 4a7dd285ed192acf5700c61a3451284902068513)
++++ b/.idea/sonarlint/issuestore/index.pb	(date 1693151694295)
+@@ -9529,8 +9529,6 @@
+ app-release/res/5l.xml,5/2/52b663253657c86aa93cf2845028963eb6259452
+ F
+ app-release/res/7G.xml,c/1/c1504dd49f573c384335912c1c8e072631e55a69
+-C
+-settings.gradle.kts,7/4/749edfcc96398253e5b3416184e95c46621da850
+ F
+ app-release/res/Mp.xml,7/5/75cca484ea65603336daa3888ef4051818c67dbd
+ ;
+@@ -10921,8 +10919,6 @@
+ `app/src/main/java/org/xsafter/xmtpmessenger/data/datastore/database/repository/UserRepository.kt,3/a/3a102fec894e4184e7534ea8c9376868f8229caa
+ s
+ Capp/src/main/java/org/xsafter/xmtpmessenger/ui/screens/chat/Chat.kt,a/8/a8a0ceec43879b6ce664214b046ef6d4183b3112
+-D
+-app/build.gradle.kts,d/2/d2a4383452aad84a18429a5844d31330a012a9e6
+ @
+ local.properties,0/7/0712df971a99ac4d2fccb8e0fb19f377f3374cca
+ :
+Index: .idea/sonarlint/securityhotspotstore/index.pb
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/sonarlint/securityhotspotstore/index.pb b/.idea/sonarlint/securityhotspotstore/index.pb
+--- a/.idea/sonarlint/securityhotspotstore/index.pb	(revision 4a7dd285ed192acf5700c61a3451284902068513)
++++ b/.idea/sonarlint/securityhotspotstore/index.pb	(date 1693151694302)
+@@ -9749,8 +9749,6 @@
+ app-release/res/5l.xml,5/2/52b663253657c86aa93cf2845028963eb6259452
+ F
+ app-release/res/7G.xml,c/1/c1504dd49f573c384335912c1c8e072631e55a69
+-C
+-settings.gradle.kts,7/4/749edfcc96398253e5b3416184e95c46621da850
+ F
+ app-release/res/Mp.xml,7/5/75cca484ea65603336daa3888ef4051818c67dbd
+ ;
+@@ -11141,8 +11139,6 @@
+ G.idea/sonarlint/issuestore/9/6/9610840bb88a754f4bef71830fc773339bb7868e,2/8/28da2492d4a94fa7a07eb69117e4cf116d5f7a7e
+ s
+ Capp/src/main/java/org/xsafter/xmtpmessenger/ui/screens/chat/Chat.kt,a/8/a8a0ceec43879b6ce664214b046ef6d4183b3112
+-D
+-app/build.gradle.kts,d/2/d2a4383452aad84a18429a5844d31330a012a9e6
+ @
+ local.properties,0/7/0712df971a99ac4d2fccb8e0fb19f377f3374cca
+ :
+Index: .github/workflows/android.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.github/workflows/android.yml b/.github/workflows/android.yml
+--- a/.github/workflows/android.yml	(revision 4a7dd285ed192acf5700c61a3451284902068513)
++++ b/.github/workflows/android.yml	(date 1693151691901)
+@@ -1,18 +1,19 @@
+-name: Android CI
++name: Build and Release
+ 
+ on:
+   push:
+-    branches: [ "master" ]
+-  pull_request:
+-    branches: [ "master" ]
++    branches:
++      - master
++    tags:
++      - "v*"
+ 
+ jobs:
+   build:
+-
+     runs-on: ubuntu-latest
+ 
+     steps:
+     - uses: actions/checkout@v3
++
+     - name: set up JDK 17
+       uses: actions/setup-java@v3
+       with:
+@@ -22,5 +23,16 @@
+ 
+     - name: Grant execute permission for gradlew
+       run: chmod +x gradlew
++
++    - name: Access MAPBOX_DOWNLOADS_TOKEN
++      env:
++        MAPBOX_DOWNLOADS_TOKEN: $
++      run: echo project.ext.MAPBOX_DOWNLOADS_TOKEN=\"$MAPBOX_DOWNLOADS_TOKEN\" > ./local.properties
++
++    - name: Access SENTRY_TOKEN
++      env:
++        SENTRY_TOKEN: $
++      run: echo auth.token=\"$SENTRY_TOKEN\" >> ./sentry.properties
++
+     - name: Build with Gradle
+       run: ./gradlew build
+diff --git a/app/release/app-arm64-v8a-release.apk b/app/release/app-arm64-v8a-release.apk
+deleted file mode 100644
+index acb9f3752e2e7b04a1378d77fa6a2ab8cada0809..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+Hc$@<O00001
+
+diff --git a/app/release/app-armeabi-v7a-release.apk b/app/release/app-armeabi-v7a-release.apk
+deleted file mode 100644
+index ca2c82575181d16daefdbd002176baab6979aa16..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+Hc$@<O00001
+
+diff --git a/app/release/app-x86_64-release.apk b/app/release/app-x86_64-release.apk
+deleted file mode 100644
+index 829e098e00e887245e8b043e452d8779aaa048b7..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+Hc$@<O00001
+

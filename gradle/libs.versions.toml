@@ -1,7 +1,7 @@
 [versions]
 accompanistCoil = "0.6.2"
 coilSvg = "2.4.0"
-com-android-application = "8.2.0-alpha15"
+com-android-application = "8.3.0-alpha01"
 coreSplashscreen = "1.0.1"
 datastoreCore = "1.0.0"
 espresso-core = "3.5.1"

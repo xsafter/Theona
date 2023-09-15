@@ -2,6 +2,7 @@ package org.xsafter.xmtpmessenger.ui.screens.register
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +19,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,8 +31,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
@@ -56,32 +59,51 @@ fun RegisterScreen(
         .build()
 
 
-
+    val isDarkTheme = isSystemInDarkTheme()
+    val l_background = if (isDarkTheme) {
+        R.drawable.l_abstract_dark
+    } else {
+        R.drawable.l_abstract_light
+    }
+    val r_background = if (isDarkTheme) {
+        R.drawable.r_abstract_dark
+    } else {
+        R.drawable.r_abstract_light
+    }
+    val logo = if (isDarkTheme) {
+        painterResource(id = R.drawable.logo_dark)
+    } else {
+        painterResource(id = R.drawable.th_logo_1)
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             //.padding(horizontal = 16.dp)
-            .paint(alignment = Alignment.TopStart,
+            .paint(
+                alignment = Alignment.TopStart,
                 painter =
-            rememberAsyncImagePainter(R.drawable.l_abstract_light, imageLoader))
-            .paint(alignment = Alignment.BottomEnd,
+                rememberAsyncImagePainter(l_background, imageLoader)
+            )
+            .paint(
+                alignment = Alignment.BottomEnd,
                 painter =
-                rememberAsyncImagePainter(R.drawable.r_abstract_light, imageLoader))
+                rememberAsyncImagePainter(r_background, imageLoader)
+            )
             .padding(horizontal = 24.dp)
     ) {
 
-        Spacer(modifier = Modifier.height(64.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         Box(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Image(
-                painter = painterResource(id = R.drawable.th_logo_1),
+                painter = logo,
                 contentDescription = "Logo",
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
-                    .size(300.dp)
+                    .size(280.dp)
                     .align(Alignment.TopCenter)
             )
         }
@@ -89,8 +111,9 @@ fun RegisterScreen(
 
         Text(
             text = "Create Account",
-            style = MaterialTheme.typography.displaySmall,
-            modifier = Modifier.paddingFromBaseline(top = 100.dp, bottom = 24.dp)
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.paddingFromBaseline(top = 40.dp, bottom = 24.dp)
         )
 
         OutlinedTextField(
@@ -126,7 +149,7 @@ fun RegisterScreen(
             visualTransformation = PasswordVisualTransformation(),
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
 
 
@@ -153,14 +176,20 @@ fun RegisterScreen(
             Text(text = "Create account")
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         // Navigate to login screen
-        TextButton(
-            onClick = { /* Navigate to login screen */ },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Already have an account? Log in")
-        }
+//        TextButton(
+//            onClick = { /* Navigate to login screen */ },
+//            modifier = Modifier.fillMaxWidth()
+//        ) {
+//            Text("Already have an account? Log in")
+//        }
     }
+}
+
+@Preview
+@Composable
+fun RegisterPreview() {
+    RegisterScreen(viewModel = hiltViewModel(), navController = rememberNavController())
 }

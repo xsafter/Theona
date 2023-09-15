@@ -25,6 +25,7 @@ class ChatViewModel @AssistedInject constructor(
     interface Factory {
         fun create(userId: String): ChatViewModel
     }
+
     companion object {
         fun provideFactory(
             assistedFactory: Factory,

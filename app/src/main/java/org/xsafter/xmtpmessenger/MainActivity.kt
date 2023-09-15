@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun NavigationComponent(navController: NavHostController, navControllerMainScreen: NavHostController,client: Client) {
+    fun NavigationComponent(navController: NavHostController, navControllerMainScreen: NavHostController, client: Client) {
         val registerViewModel = RegisterViewModel(LocalContext.current.credentialsDataStore)
         var startDestination by remember { mutableStateOf("register") }
 
@@ -167,7 +167,6 @@ class MainActivity : AppCompatActivity() {
             composable("main") {
                 Main(
                     client = client,
-                    LocalContext.current,
                     navController = navControllerMainScreen,
                     navController
                 )
