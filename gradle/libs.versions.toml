@@ -17,6 +17,7 @@ osmdroidAndroid = "6.1.16"
 pagingCompose = "3.2.0"
 pagingRuntime = "3.2.0"
 playServicesLocation = "21.0.1"
+runtimeTracing = "1.0.0-alpha04"
 sentryComposeAndroid = "6.28.0"
 sentryAndroid = "6.28.0"
 testng = "7.8.0"
@@ -76,6 +77,7 @@ androidx-material3 = { module = "androidx.compose.material3:material3", version.
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingRuntime" }
 androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
+androidx-runtime-tracing = { module = "androidx.compose.runtime:runtime-tracing", version.ref = "runtimeTracing" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coilSvg" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }

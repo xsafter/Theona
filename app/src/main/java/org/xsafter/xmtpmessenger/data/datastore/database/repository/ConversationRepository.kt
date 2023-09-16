@@ -39,7 +39,7 @@ class ConversationRepository @Inject constructor (val client: Client) {
 
     suspend fun getMessages(conversation: Conversation): Flow<DecodedMessage> = flow {
         val messages = conversation.messages().asFlow()
-        Log.d("MESSAGES", messages.toString())
+        //Log.d("MESSAGES", messages.toString())
         val streamMessages = conversation.streamMessages()
         val messageFlow = merge(messages, streamMessages)
         emitAll(messageFlow)
